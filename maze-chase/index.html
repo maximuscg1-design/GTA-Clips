@@ -27,7 +27,7 @@
 <script>
 (() => {
   // ---- Maze -----------------------------------------------------------
-  // # wall, . spark, o power core, = pen gate, E pen interior, P player start, space = empty void
+  // # wall, . spark, o power core, = pen gate, E pen interior, P player start, space = empty void (blocked), _ = eaten floor (set at runtime)
   const MAP = [
     "#####################",
     "#o.......#.#.......o#",
@@ -63,8 +63,13 @@
   const DIR_LIST = [DIRS.up, DIRS.left, DIRS.down, DIRS.right];
 
   let grid, sparksLeft, player, enemies, score = 0, lives = 3, level = 1;
-  let best = +(localStorage.getItem('orbchase-best') || 0);
-  let state = 'ready', stateTimer = 0, frightTimer = 0, chain = 0, paused = false;
+  // Storage can be blocked (privacy mode, sandboxed embeds) - never let that break the game
+  const store = {
+    get() { try { return +(localStorage.getItem('orbchase-best') || 0); } catch (e) { return 0; } },
+    set(v) { try { localStorage.setItem('orbchase-best', v); } catch (e) { /* ignore */ } },
+  };
+  let best = store.get();
+  let state = 'ready', stateTimer = 0, overAt = 0, frightTimer = 0, chain = 0, paused = false;
   let popups = [], time = 0;
 
   // ---- Sound (tiny WebAudio blips) ------------------------------------
@@ -136,19 +141,20 @@
 
   function updateHud() {
     $('score').textContent = score; $('lives').textContent = lives; $('level').textContent = level;
-    if (score > best) { best = score; localStorage.setItem('orbchase-best', best); }
+    if (score > best) { best = score; store.set(best); }
     $('best').textContent = best;
   }
 
   // ---- Input ----------------------------------------------------------
   const KEYMAP = { ArrowUp: 'up', KeyW: 'up', ArrowDown: 'down', KeyS: 'down', ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right' };
   addEventListener('keydown', e => {
+    if (state === 'over' && e.repeat) return; // held keys shouldn't restart
     if (KEYMAP[e.code]) { e.preventDefault(); steer(KEYMAP[e.code]); }
     else if (e.code === 'KeyP' && state === 'play') paused = !paused;
-    else if ((e.code === 'Enter' || e.code === 'Space') && state === 'over') newGame();
+    else if ((e.code === 'Enter' || e.code === 'Space') && state === 'over') tryRestart();
   });
   function steer(name) {
-    if (state === 'over') { newGame(); return; }
+    if (state === 'over') { tryRestart(); return; }
     player.next = { ...DIRS[name] };
   }
   let touchStart = null;
@@ -160,7 +166,9 @@
     steer(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'));
     touchStart = { x: t.clientX, y: t.clientY };
   }, { passive: true });
-  addEventListener('touchend', () => { if (state === 'over') newGame(); touchStart = null; });
+  addEventListener('touchend', () => { if (state === 'over') tryRestart(); touchStart = null; });
+  // Short lockout so a key held/pressed while dying doesn't skip the Game Over screen
+  function tryRestart() { if (performance.now() - overAt > 1200) newGame(); }
 
   // ---- Movement core --------------------------------------------------
   // Moves an entity along the grid; calls chooseDir(ent) whenever it reaches a tile center.
@@ -244,7 +252,7 @@
       if (stateTimer <= 0) {
         if (state === 'ready') state = 'play';
         else if (state === 'dying') {
-          if (lives <= 0) { state = 'over'; }
+          if (lives <= 0) { state = 'over'; overAt = performance.now(); }
           else { resetPositions(); state = 'ready'; stateTimer = 1.5; }
         } else if (state === 'cleared') { level++; buildLevel(); state = 'ready'; stateTimer = 2; updateHud(); }
       }
@@ -259,7 +267,7 @@
     move(player, player.speed, dt, playerChoose);
     const t = grid[player.y] && grid[player.y][player.x];
     if (t === '.' || t === 'o') {
-      grid[player.y][player.x] = ' ';
+      grid[player.y][player.x] = '_'; // eaten -> plain floor
       sparksLeft--;
       if (t === '.') { score += 10; beep(660 + (sparksLeft % 2) * 120, 0.04); }
       else {
@@ -297,7 +305,8 @@
       move(e, spd, dt, enemyChoose);
 
       // Collision
-      if (e.mode !== 'returning' && Math.abs(e.px - player.px) < T * 0.6 && Math.abs(e.py - player.py) < T * 0.6) {
+      let dx = Math.abs(e.px - player.px); dx = Math.min(dx, COLS * T - dx); // account for tunnel wrap
+      if (e.mode !== 'returning' && dx < T * 0.6 && Math.abs(e.py - player.py) < T * 0.6) {
         if (e.frightened) {
           chain++;
           const pts = 200 * 2 ** (chain - 1);
@@ -431,6 +440,18 @@
 
   newGame();
   requestAnimationFrame(frame);
+
+  // Test hook: only exposed when the page is opened with ?debug
+  if (location.search.includes('debug')) {
+    window.__orb = {
+      get player() { return player; }, get enemies() { return enemies; }, get grid() { return grid; },
+      get state() { return state; }, get sparksLeft() { return sparksLeft; },
+      get score() { return score; }, get lives() { return lives; }, get level() { return level; },
+      get frightTimer() { return frightTimer; },
+      set lives(v) { lives = v; }, set state(v) { state = v; }, set stateTimer(v) { stateTimer = v; },
+      update, draw, steer, walkable, newGame, T, COLS, ROWS,
+    };
+  }
 })();
 </script>
 </body>
