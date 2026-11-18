@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Orb Chase</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #0b0d17; color: #e8ecff;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  body { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; touch-action: none; }
+  #hud { display: flex; gap: 28px; font-size: 18px; font-weight: 600; letter-spacing: .5px; }
+  #hud span b { color: #5ef2d6; }
+  canvas { background: #0b0d17; image-rendering: pixelated; max-width: 96vw; max-height: 78vh; }
+  #help { font-size: 13px; opacity: .65; text-align: center; }
+</style>
+</head>
+<body>
+<div id="hud">
+  <span>Score <b id="score">0</b></span>
+  <span>Best <b id="best">0</b></span>
+  <span>Level <b id="level">1</b></span>
+  <span>Lives <b id="lives">3</b></span>
+</div>
+<canvas id="game"></canvas>
+<div id="help">Arrow keys / WASD or swipe to move &middot; P to pause &middot; Collect every spark, grab a core to turn the tables</div>
+
+<script>
+(() => {
+  // ---- Maze -----------------------------------------------------------
+  // # wall, . spark, o power core, = pen gate, E pen interior, P player start, space = empty void
+  const MAP = [
+    "#####################",
+    "#o.......#.#.......o#",
+    "#.##.###.#.#.###.##.#",
+    "#...................#",
+    "#.##.#.#######.#.##.#",
+    "#....#....#....#....#",
+    "####.####.#.####.####",
+    "   #.#.........#.#   ",
+    "####.#.###=###.#.####",
+    ".....#.#EEEEE#.#.....",
+    "####.#.#######.#.####",
+    "   #.#.........#.#   ",
+    "####.#.#######.#.####",
+    "#.........#.........#",
+    "#.##.###.#.#.###.##.#",
+    "#o.#......P......#.o#",
+    "##.#.#.#######.#.#.##",
+    "#....#....#....#....#",
+    "#.#######.#.#######.#",
+    "#...................#",
+    "#####################",
+  ];
+  const COLS = MAP[0].length, ROWS = MAP.length, T = 24;
+  const GATE = { x: 10, y: 8 }, PEN_EXIT = { x: 10, y: 7 }, PEN_CENTER = { x: 10, y: 9 };
+
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+  canvas.width = COLS * T; canvas.height = ROWS * T;
+
+  const $ = id => document.getElementById(id);
+  const DIRS = { up: { x: 0, y: -1 }, down: { x: 0, y: 1 }, left: { x: -1, y: 0 }, right: { x: 1, y: 0 } };
+  const DIR_LIST = [DIRS.up, DIRS.left, DIRS.down, DIRS.right];
+
+  let grid, sparksLeft, player, enemies, score = 0, lives = 3, level = 1;
+  let best = +(localStorage.getItem('orbchase-best') || 0);
+  let state = 'ready', stateTimer = 0, frightTimer = 0, chain = 0, paused = false;
+  let popups = [], time = 0;
+
+  // ---- Sound (tiny WebAudio blips) ------------------------------------
+  let audio;
+  function beep(freq, dur = 0.06, type = 'square', vol = 0.04) {
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      const o = audio.createOscillator(), g = audio.createGain();
+      o.type = type; o.frequency.value = freq; g.gain.value = vol;
+      g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + dur);
+      o.connect(g).connect(audio.destination); o.start(); o.stop(audio.currentTime + dur);
+    } catch (e) { /* audio unavailable */ }
+  }
+
+  // ---- Helpers --------------------------------------------------------
+  const tileAt = (x, y) => {
+    if (y < 0 || y >= ROWS) return '#';
+    x = (x + COLS) % COLS;
+    return grid[y][x];
+  };
+  function walkable(x, y, ent) {
+    const t = tileAt(x, y);
+    if (t === '#' || t === ' ') return false;
+    if (t === '=' || t === 'E') return ent && ent.isEnemy && (ent.mode === 'leaving' || ent.mode === 'returning' || ent.mode === 'pen');
+    return true;
+  }
+  const dist2 = (ax, ay, bx, by) => (ax - bx) ** 2 + (ay - by) ** 2;
+
+  function makeEntity(x, y, speed) {
+    return { x, y, px: x * T + T / 2, py: y * T + T / 2, dir: { x: 0, y: 0 }, next: { x: 0, y: 0 }, speed };
+  }
+
+  // ---- Setup ----------------------------------------------------------
+  function buildLevel() {
+    grid = MAP.map(r => r.split(''));
+    sparksLeft = 0;
+    for (const row of grid) for (const c of row) if (c === '.' || c === 'o') sparksLeft++;
+    resetPositions();
+  }
+
+  function resetPositions() {
+    let sx = 10, sy = 15;
+    MAP.forEach((r, y) => { const i = r.indexOf('P'); if (i >= 0) { sx = i; sy = y; } });
+    const lvlBoost = Math.min(level - 1, 6) * 0.35;
+    player = makeEntity(sx, sy, 6.5 + lvlBoost * 0.6);
+    player.dir = { ...DIRS.left }; player.next = { ...DIRS.left }; player.facing = DIRS.left;
+
+    const specs = [
+      { x: 10, y: 7, color: '#ff4f6d', name: 'Rook',   mode: 'roam', release: 0 },
+      { x: 9,  y: 9, color: '#ffb347', name: 'Fable',  mode: 'pen',  release: 2.5 },
+      { x: 10, y: 9, color: '#b07cff', name: 'Glint',  mode: 'pen',  release: 6 },
+      { x: 11, y: 9, color: '#4fa8ff', name: 'Drift',  mode: 'pen',  release: 10 },
+    ];
+    enemies = specs.map((s, i) => {
+      const e = makeEntity(s.x, s.y, 5.2 + lvlBoost);
+      Object.assign(e, { isEnemy: true, color: s.color, kind: i, mode: s.mode, release: s.release / Math.min(level, 3), frightened: false });
+      e.dir = s.mode === 'roam' ? { ...DIRS.left } : { ...DIRS.up };
+      return e;
+    });
+    frightTimer = 0; chain = 0;
+  }
+
+  function newGame() {
+    score = 0; lives = 3; level = 1;
+    buildLevel();
+    state = 'ready'; stateTimer = 2;
+    updateHud();
+  }
+
+  function updateHud() {
+    $('score').textContent = score; $('lives').textContent = lives; $('level').textContent = level;
+    if (score > best) { best = score; localStorage.setItem('orbchase-best', best); }
+    $('best').textContent = best;
+  }
+
+  // ---- Input ----------------------------------------------------------
+  const KEYMAP = { ArrowUp: 'up', KeyW: 'up', ArrowDown: 'down', KeyS: 'down', ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right' };
+  addEventListener('keydown', e => {
+    if (KEYMAP[e.code]) { e.preventDefault(); steer(KEYMAP[e.code]); }
+    else if (e.code === 'KeyP' && state === 'play') paused = !paused;
+    else if ((e.code === 'Enter' || e.code === 'Space') && state === 'over') newGame();
+  });
+  function steer(name) {
+    if (state === 'over') { newGame(); return; }
+    player.next = { ...DIRS[name] };
+  }
+  let touchStart = null;
+  addEventListener('touchstart', e => { const t = e.touches[0]; touchStart = { x: t.clientX, y: t.clientY }; }, { passive: true });
+  addEventListener('touchmove', e => {
+    if (!touchStart) return;
+    const t = e.touches[0], dx = t.clientX - touchStart.x, dy = t.clientY - touchStart.y;
+    if (Math.max(Math.abs(dx), Math.abs(dy)) < 24) return;
+    steer(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'));
+    touchStart = { x: t.clientX, y: t.clientY };
+  }, { passive: true });
+  addEventListener('touchend', () => { if (state === 'over') newGame(); touchStart = null; });
+
+  // ---- Movement core --------------------------------------------------
+  // Moves an entity along the grid; calls chooseDir(ent) whenever it reaches a tile center.
+  function move(ent, speed, dt, chooseDir) {
+    let remaining = speed * T * dt;
+    while (remaining > 0) {
+      const cx = ent.x * T + T / 2, cy = ent.y * T + T / 2;
+      const toCenter = Math.abs(ent.px - cx) + Math.abs(ent.py - cy);
+      const headingToCenter = (cx - ent.px) * ent.dir.x + (cy - ent.py) * ent.dir.y > 0;
+
+      if (toCenter > 0.001 && headingToCenter) {
+        const step = Math.min(remaining, toCenter);
+        ent.px += ent.dir.x * step; ent.py += ent.dir.y * step; remaining -= step;
+        continue;
+      }
+      if (toCenter <= 0.001) {
+        ent.px = cx; ent.py = cy;
+        chooseDir(ent);
+        if (!walkable(ent.x + ent.dir.x, ent.y + ent.dir.y, ent)) { ent.dir = { x: 0, y: 0 }; return; }
+      }
+      if (ent.dir.x === 0 && ent.dir.y === 0) return;
+      // Move toward the next tile; update tile coords once we cross the midpoint.
+      const step = Math.min(remaining, T / 2);
+      ent.px += ent.dir.x * step; ent.py += ent.dir.y * step; remaining -= step;
+      const nx = Math.floor(ent.px / T), ny = Math.floor(ent.py / T);
+      if (nx !== ent.x || ny !== ent.y) {
+        ent.x = nx; ent.y = ny;
+        // tunnel wrap
+        if (ent.x < 0) { ent.x = COLS - 1; ent.px += COLS * T; }
+        if (ent.x >= COLS) { ent.x = 0; ent.px -= COLS * T; }
+      }
+    }
+  }
+
+  function playerChoose(p) {
+    if ((p.next.x || p.next.y) && walkable(p.x + p.next.x, p.y + p.next.y, p)) p.dir = { ...p.next };
+    if (p.dir.x || p.dir.y) p.facing = p.dir;
+  }
+
+  function enemyTarget(e) {
+    if (e.mode === 'returning') return PEN_CENTER;
+    if (e.mode === 'leaving') return e.y > GATE.y ? GATE : PEN_EXIT;
+    const p = player;
+    // Each enemy has its own personality
+    switch (e.kind) {
+      case 0: return { x: p.x, y: p.y };                                        // direct chaser
+      case 1: return { x: p.x + p.dir.x * 4, y: p.y + p.dir.y * 4 };            // ambusher
+      case 2: { const r = enemies[0];                                           // flanker
+        return { x: p.x * 2 - r.x + p.dir.x * 2, y: p.y * 2 - r.y + p.dir.y * 2 }; }
+      default: return dist2(e.x, e.y, p.x, p.y) > 64 ? { x: p.x, y: p.y }       // shy: chases, backs off when close
+                                                     : { x: 1, y: ROWS - 2 };
+    }
+  }
+
+  function enemyChoose(e) {
+    if (e.mode === 'pen') { // bob up and down inside the pen
+      if (!walkable(e.x + e.dir.x, e.y + e.dir.y, e)) e.dir = { x: 0, y: -e.dir.y || 1 };
+      return;
+    }
+    if (e.mode === 'returning' && e.x === PEN_CENTER.x && e.y === PEN_CENTER.y) { e.mode = 'leaving'; e.frightened = false; }
+    if (e.mode === 'leaving' && e.x === PEN_EXIT.x && e.y === PEN_EXIT.y) { e.mode = 'roam'; e.dir = { ...DIRS.left }; }
+
+    const options = DIR_LIST.filter(d =>
+      !(d.x === -e.dir.x && d.y === -e.dir.y && (e.dir.x || e.dir.y)) && walkable(e.x + d.x, e.y + d.y, e));
+    if (!options.length) { e.dir = { x: -e.dir.x, y: -e.dir.y }; return; }
+    if (e.frightened && e.mode === 'roam') { e.dir = { ...options[Math.floor(Math.random() * options.length)] }; return; }
+    const tgt = enemyTarget(e);
+    // A little randomness keeps them from feeling robotic
+    if (e.mode === 'roam' && Math.random() < 0.08) { e.dir = { ...options[Math.floor(Math.random() * options.length)] }; return; }
+    options.sort((a, b) => dist2(e.x + a.x, e.y + a.y, tgt.x, tgt.y) - dist2(e.x + b.x, e.y + b.y, tgt.x, tgt.y));
+    e.dir = { ...options[0] };
+  }
+
+  // ---- Update ---------------------------------------------------------
+  function update(dt) {
+    time += dt;
+    popups = popups.filter(p => (p.t -= dt) > 0);
+
+    if (state === 'ready' || state === 'dying' || state === 'cleared') {
+      stateTimer -= dt;
+      if (stateTimer <= 0) {
+        if (state === 'ready') state = 'play';
+        else if (state === 'dying') {
+          if (lives <= 0) { state = 'over'; }
+          else { resetPositions(); state = 'ready'; stateTimer = 1.5; }
+        } else if (state === 'cleared') { level++; buildLevel(); state = 'ready'; stateTimer = 2; updateHud(); }
+      }
+      return;
+    }
+    if (state !== 'play' || paused) return;
+
+    // Player (reversing is allowed instantly, other turns happen at tile centers)
+    if (player.next.x === -player.dir.x && player.next.y === -player.dir.y && (player.dir.x || player.dir.y)) {
+      player.dir = { ...player.next }; player.facing = player.dir;
+    }
+    move(player, player.speed, dt, playerChoose);
+    const t = grid[player.y] && grid[player.y][player.x];
+    if (t === '.' || t === 'o') {
+      grid[player.y][player.x] = ' ';
+      sparksLeft--;
+      if (t === '.') { score += 10; beep(660 + (sparksLeft % 2) * 120, 0.04); }
+      else {
+        score += 50; beep(330, 0.25, 'sawtooth');
+        frightTimer = Math.max(3, 8 - level); chain = 0;
+        for (const e of enemies) if (e.mode !== 'returning') {
+          e.frightened = true;
+          if (e.mode === 'roam' && (e.dir.x || e.dir.y)) { /* turn around */
+            e.dir = { x: -e.dir.x, y: -e.dir.y };
+            if (!walkable(e.x + e.dir.x, e.y + e.dir.y, e)) e.dir = { x: -e.dir.x, y: -e.dir.y };
+          }
+        }
+      }
+      updateHud();
+      if (sparksLeft === 0) { state = 'cleared'; stateTimer = 2; beep(880, 0.4, 'triangle'); return; }
+    }
+
+    // Frightened timer
+    if (frightTimer > 0) {
+      frightTimer -= dt;
+      if (frightTimer <= 0) for (const e of enemies) e.frightened = false;
+    }
+
+    // Enemies
+    for (const e of enemies) {
+      if (e.mode === 'pen') {
+        e.release -= dt;
+        if (e.release <= 0) { e.mode = 'leaving'; }
+      }
+      let spd = e.speed;
+      if (e.mode === 'returning') spd = 12;
+      else if (e.frightened) spd *= 0.55;
+      else if (e.mode === 'pen' || e.mode === 'leaving') spd *= 0.5;
+      else if (tileAt(e.x, e.y) && e.y === 9 && (e.x < 5 || e.x > 15)) spd *= 0.6; // slow in the tunnel
+      move(e, spd, dt, enemyChoose);
+
+      // Collision
+      if (e.mode !== 'returning' && Math.abs(e.px - player.px) < T * 0.6 && Math.abs(e.py - player.py) < T * 0.6) {
+        if (e.frightened) {
+          chain++;
+          const pts = 200 * 2 ** (chain - 1);
+          score += pts; updateHud();
+          popups.push({ x: e.px, y: e.py, text: pts, t: 1 });
+          e.mode = 'returning'; e.frightened = false;
+          beep(220 * chain, 0.15, 'triangle', 0.06);
+        } else if (e.mode === 'roam' || e.mode === 'leaving') {
+          lives--; updateHud();
+          state = 'dying'; stateTimer = 1.6;
+          beep(160, 0.6, 'sawtooth', 0.05);
+          return;
+        }
+      }
+    }
+  }
+
+  // ---- Draw -----------------------------------------------------------
+  function drawMaze() {
+    ctx.lineWidth = 2;
+    for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) {
+      const c = grid[y][x], px = x * T, py = y * T;
+      if (c === '#') {
+        ctx.fillStyle = '#16204a';
+        ctx.fillRect(px + 2, py + 2, T - 4, T - 4);
+        ctx.strokeStyle = '#3d6bff';
+        // Draw edges only where the neighbor isn't a wall, for a clean outlined look
+        ctx.beginPath();
+        if (tileAt(x, y - 1) !== '#') { ctx.moveTo(px + 2, py + 2); ctx.lineTo(px + T - 2, py + 2); }
+        if (tileAt(x, y + 1) !== '#') { ctx.moveTo(px + 2, py + T - 2); ctx.lineTo(px + T - 2, py + T - 2); }
+        if (x === 0 || tileAt(x - 1, y) !== '#') { ctx.moveTo(px + 2, py + 2); ctx.lineTo(px + 2, py + T - 2); }
+        if (x === COLS - 1 || tileAt(x + 1, y) !== '#') { ctx.moveTo(px + T - 2, py + 2); ctx.lineTo(px + T - 2, py + T - 2); }
+        ctx.stroke();
+        // fill seams between adjacent walls
+        if (tileAt(x + 1, y) === '#' && x < COLS - 1) ctx.fillRect(px + T - 2, py + 2, 4, T - 4);
+        if (tileAt(x, y + 1) === '#') ctx.fillRect(px + 2, py + T - 2, T - 4, 4);
+      } else if (c === '=') {
+        ctx.fillStyle = '#ff8fd1'; ctx.fillRect(px, py + T / 2 - 2, T, 4);
+      } else if (c === '.') {
+        ctx.fillStyle = '#ffe9a8';
+        ctx.fillRect(px + T / 2 - 2, py + T / 2 - 2, 4, 4);
+      } else if (c === 'o') {
+        const pulse = 4 + Math.sin(time * 6) * 1.5;
+        const g = ctx.createRadialGradient(px + T / 2, py + T / 2, 0, px + T / 2, py + T / 2, pulse * 2);
+        g.addColorStop(0, '#ffffff'); g.addColorStop(0.4, '#7dffe6'); g.addColorStop(1, 'rgba(125,255,230,0)');
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(px + T / 2, py + T / 2, pulse * 2, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+  }
+
+  function drawPlayer() {
+    const { px, py } = player;
+    let r = T * 0.42;
+    if (state === 'dying') r *= Math.max(0, stateTimer / 1.6);
+    if (r <= 0) return;
+    // glowing orb
+    const g = ctx.createRadialGradient(px - r * 0.3, py - r * 0.3, r * 0.1, px, py, r);
+    g.addColorStop(0, '#d8fff6'); g.addColorStop(0.5, '#3fe0c0'); g.addColorStop(1, '#138a7a');
+    ctx.shadowColor = '#3fe0c0'; ctx.shadowBlur = 12;
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(px, py, r, 0, Math.PI * 2); ctx.fill();
+    ctx.shadowBlur = 0;
+    // single eye looking where it's heading
+    const f = player.facing || DIRS.left;
+    const ex = px + f.x * r * 0.35, ey = py + f.y * r * 0.35;
+    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(ex, ey, r * 0.32, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#0b0d17'; ctx.beginPath(); ctx.arc(ex + f.x * r * 0.12, ey + f.y * r * 0.12, r * 0.15, 0, Math.PI * 2); ctx.fill();
+  }
+
+  function drawEnemy(e) {
+    const { px, py } = e, r = T * 0.44;
+    const flashing = e.frightened && frightTimer < 2 && Math.floor(time * 8) % 2 === 0;
+    if (e.mode !== 'returning') {
+      const body = e.frightened ? (flashing ? '#ffffff' : '#2a3cff') : e.color;
+      const spin = time * (e.frightened ? 1 : 3) + e.kind;
+      // spiky star body
+      ctx.fillStyle = body; ctx.beginPath();
+      const spikes = 8;
+      for (let i = 0; i < spikes * 2; i++) {
+        const a = spin + (i * Math.PI) / spikes, rr = i % 2 ? r * 0.7 : r;
+        ctx.lineTo(px + Math.cos(a) * rr, py + Math.sin(a) * rr);
+      }
+      ctx.closePath(); ctx.fill();
+      ctx.fillStyle = e.frightened ? '#9fb0ff' : '#0b0d17';
+      ctx.beginPath(); ctx.arc(px, py, r * 0.5, 0, Math.PI * 2); ctx.fill();
+    }
+    // eyes (all that remains when returning)
+    const d = e.dir, eyeColor = e.frightened ? '#ffd1d1' : '#fff';
+    for (const s of [-1, 1]) {
+      const ex = px + s * r * 0.22, ey = py - r * 0.05;
+      ctx.fillStyle = eyeColor; ctx.beginPath(); ctx.arc(ex, ey, r * 0.17, 0, Math.PI * 2); ctx.fill();
+      if (!e.frightened) {
+        ctx.fillStyle = e.mode === 'returning' ? e.color : '#0b0d17';
+        ctx.beginPath(); ctx.arc(ex + d.x * r * 0.07, ey + d.y * r * 0.07, r * 0.09, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+  }
+
+  function banner(text, sub) {
+    ctx.fillStyle = 'rgba(11,13,23,0.75)';
+    ctx.fillRect(0, canvas.height / 2 - 40, canvas.width, sub ? 80 : 56);
+    ctx.textAlign = 'center'; ctx.fillStyle = '#5ef2d6';
+    ctx.font = 'bold 28px system-ui, sans-serif';
+    ctx.fillText(text, canvas.width / 2, canvas.height / 2 - 2);
+    if (sub) { ctx.fillStyle = '#e8ecff'; ctx.font = '15px system-ui, sans-serif'; ctx.fillText(sub, canvas.width / 2, canvas.height / 2 + 26); }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawMaze();
+    if (state !== 'over') {
+      if (state !== 'dying' || stateTimer > 1.2) enemies.forEach(drawEnemy);
+      drawPlayer();
+    }
+    ctx.textAlign = 'center'; ctx.font = 'bold 14px system-ui, sans-serif'; ctx.fillStyle = '#7dffe6';
+    for (const p of popups) ctx.fillText(p.text, p.x, p.y - (1 - p.t) * 16);
+
+    if (state === 'ready') banner(level === 1 && score === 0 ? 'ORB CHASE' : `LEVEL ${level}`, 'Get ready!');
+    if (state === 'cleared') banner('MAZE CLEARED!');
+    if (state === 'over') banner('GAME OVER', 'Press Enter, an arrow key, or tap to play again');
+    if (paused) banner('PAUSED', 'Press P to resume');
+  }
+
+  // ---- Loop -----------------------------------------------------------
+  let last = performance.now();
+  function frame(now) {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    update(dt); draw();
+    requestAnimationFrame(frame);
+  }
+
+  newGame();
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
