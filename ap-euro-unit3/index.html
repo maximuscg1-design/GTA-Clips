@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AP Euro Unit 3: Absolutism &amp; Constitutionalism</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f5f0; --surface: #ffffff; --surface-2: #f0ede6; --text: #1d1b18; --muted: #5f5a52;
+    --border: #e2ddd3; --accent: #7a2e2e; --accent-soft: #f4e6e3; --gold: #a87b1f;
+    --good: #2f6b3a; --good-soft: #e3f1e5; --bad: #a3322a; --bad-soft: #f8e3e1;
+    --radius: 12px; --shadow: 0 1px 2px rgba(0,0,0,.05), 0 4px 16px rgba(0,0,0,.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #171512; --surface: #211e1a; --surface-2: #2a2621; --text: #eeeae3; --muted: #aaa397;
+      --border: #3a352e; --accent: #e08f84; --accent-soft: #3a2422; --gold: #d8ad55;
+      --good: #7cc78a; --good-soft: #1f3324; --bad: #f08a80; --bad-soft: #3d2120;
+      --shadow: 0 1px 2px rgba(0,0,0,.3);
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 Inter, system-ui, sans-serif; }
+  header { background: var(--surface); border-bottom: 1px solid var(--border); }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+  .hero { padding: 28px 0 8px; }
+  .eyebrow { color: var(--accent); font-weight: 600; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; }
+  h1 { font-family: "Source Serif 4", Georgia, serif; font-size: clamp(26px, 4vw, 36px); line-height: 1.2; margin: 6px 0 8px; }
+  h2 { font-family: "Source Serif 4", Georgia, serif; font-size: 24px; margin: 0 0 12px; }
+  h3 { font-size: 17px; margin: 0 0 8px; }
+  .sub { color: var(--muted); margin: 0 0 16px; }
+  nav { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 0; }
+  nav a { padding: 10px 14px; color: var(--muted); text-decoration: none; font-weight: 500; border-bottom: 3px solid transparent; white-space: nowrap; }
+  nav a:hover { color: var(--text); }
+  nav a.active { color: var(--accent); border-bottom-color: var(--accent); }
+  main { padding: 28px 0 60px; }
+  .view { display: none; }
+  .view.active { display: block; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); margin-bottom: 16px; }
+  .bigidea { border-left: 4px solid var(--gold); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } }
+  .pill { display: inline-block; padding: 2px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; }
+  ul { padding-left: 20px; margin: 6px 0; }
+  li { margin: 3px 0; }
+  details { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; box-shadow: var(--shadow); }
+  details > summary { cursor: pointer; padding: 14px 18px; font-weight: 600; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+  details > summary::-webkit-details-marker { display: none; }
+  details > summary::after { content: "+"; font-size: 20px; color: var(--muted); }
+  details[open] > summary::after { content: "–"; }
+  details .body { padding: 0 18px 16px; }
+  .term { font-weight: 600; }
+  button { font: inherit; cursor: pointer; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); padding: 9px 16px; font-weight: 500; }
+  button:hover { background: var(--surface-2); }
+  button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  @media (prefers-color-scheme: dark) { button.primary { color: #1d1b18; } }
+  button.primary:hover { filter: brightness(1.08); }
+  button:disabled { opacity: .5; cursor: default; }
+  button:focus-visible, a:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .spacer { flex: 1; }
+  select { font: inherit; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); }
+  .progress { height: 8px; background: var(--surface-2); border-radius: 999px; overflow: hidden; margin: 12px 0 18px; }
+  .progress > div { height: 100%; background: var(--accent); transition: width .3s; }
+  .muted { color: var(--muted); }
+  .small { font-size: 14px; }
+
+  /* Flashcards */
+  .flash { perspective: 1200px; height: 260px; cursor: pointer; margin: 8px 0 16px; }
+  .flash-inner { position: relative; width: 100%; height: 100%; transition: transform .5s; transform-style: preserve-3d; }
+  .flash.flipped .flash-inner { transform: rotateY(180deg); }
+  .face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: var(--radius); border: 1px solid var(--border); background: var(--surface); box-shadow: var(--shadow); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; }
+  .face.back { transform: rotateY(180deg); background: var(--accent-soft); }
+  .face .label { position: absolute; top: 14px; left: 18px; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .face .big { font-family: "Source Serif 4", Georgia, serif; font-size: clamp(22px, 4vw, 32px); font-weight: 700; }
+  .face .def { font-size: 19px; max-width: 560px; }
+  @media (prefers-reduced-motion: reduce) { .flash-inner { transition: none; } }
+
+  /* Quiz */
+  .choices { display: grid; gap: 8px; margin: 14px 0; }
+  .choice { text-align: left; padding: 12px 14px; display: flex; gap: 12px; align-items: flex-start; }
+  .choice .key { flex: none; width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--border); display: grid; place-items: center; font-size: 13px; font-weight: 600; }
+  .choice.correct { background: var(--good-soft); border-color: var(--good); }
+  .choice.correct .key { background: var(--good); color: var(--surface); border-color: var(--good); }
+  .choice.wrong { background: var(--bad-soft); border-color: var(--bad); }
+  .choice.wrong .key { background: var(--bad); color: var(--surface); border-color: var(--bad); }
+  .feedback { border-radius: 10px; padding: 12px 14px; margin-bottom: 14px; }
+  .feedback.good { background: var(--good-soft); }
+  .feedback.bad { background: var(--bad-soft); }
+  .feedback strong { display: block; margin-bottom: 2px; }
+  .score-big { font-family: "Source Serif 4", Georgia, serif; font-size: 56px; font-weight: 700; color: var(--accent); line-height: 1; }
+  .missed { border-top: 1px solid var(--border); padding: 12px 0; }
+
+  /* Practice */
+  textarea { width: 100%; min-height: 120px; font: inherit; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); resize: vertical; }
+  .model { margin-top: 12px; padding: 14px 16px; border-radius: 10px; background: var(--surface-2); }
+  .check { display: flex; gap: 10px; align-items: flex-start; margin: 6px 0; cursor: pointer; }
+  .check input { margin-top: 5px; width: 18px; height: 18px; accent-color: var(--accent); }
+
+  /* Timeline */
+  .tl-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); margin-bottom: 8px; }
+  .tl-item .num { width: 26px; text-align: center; font-weight: 700; color: var(--muted); }
+  .tl-item .txt { flex: 1; }
+  .tl-item button { padding: 4px 10px; }
+  .tl-item.ok { background: var(--good-soft); border-color: var(--good); }
+  .tl-item.no { background: var(--bad-soft); border-color: var(--bad); }
+  .tl-item .yr { font-weight: 600; font-size: 14px; }
+
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { font-size: 13px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+  footer { color: var(--muted); font-size: 13px; text-align: center; padding: 0 0 40px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="hero">
+      <div class="eyebrow">AP European History · Unit 3 · c. 1648–1815 · ~10–15% of the exam</div>
+      <h1>Absolutism &amp; Constitutionalism</h1>
+      <p class="sub">Study the notes, drill key terms, take the quiz and practice short-answer questions. Based on the Heimler's History “AP EURO Unit 3 Review” video.</p>
+    </div>
+    <nav id="nav">
+      <a href="#notes">Notes</a>
+      <a href="#flashcards">Flashcards</a>
+      <a href="#quiz">Quiz</a>
+      <a href="#timeline">Timeline</a>
+      <a href="#practice">Short answer</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ================= NOTES ================= -->
+<section id="view-notes" class="view">
+  <div class="card bigidea">
+    <h2>The big idea</h2>
+    <p>After the religious wars ended with the <strong>Peace of Westphalia (1648)</strong>, European states centralized power, and political and religious authority merged under the state. Countries went one of two ways:</p>
+    <div class="grid2">
+      <div><span class="pill">Absolutism</span><p class="small">Monarchs consolidate all state power under themselves to advance the needs of their state (France, Russia, Prussia, Austria).</p></div>
+      <div><span class="pill">Constitutionalism</span><p class="small">The monarch's power is limited by law and a representative body (England after 1688, the Dutch Republic).</p></div>
+    </div>
+  </div>
+
+  <details open><summary>1. The rise of absolutist states</summary><div class="body">
+    <p class="term">Why absolutism took root</p>
+    <ul>
+      <li><strong>The Catholic Church's influence weakened</strong>: growing acceptance and tolerance of Protestant practice, and little appetite for religious warfare after Westphalia.</li>
+      <li><strong>Merchant classes expanded rapidly</strong> during the era of global trade. They wanted the economic and political stability absolute monarchs could provide, and power shifted away from the landed nobility toward the merchants.</li>
+    </ul>
+    <p><span class="term">Divine right of kings:</span> a monarch's authority comes directly from God, so they answer to no earthly body.</p>
+  </div></details>
+
+  <details><summary>2. France under Louis XIV</summary><div class="body"><ul>
+    <li><strong>Cardinal Mazarin</strong> ran the government while Louis was a child. The noble revolts of the <strong>Fronde</strong> convinced Louis never to let the nobility threaten him again.</li>
+    <li><strong>Intendant system:</strong> royal officials sent to the provinces to collect taxes and enforce the king's will, undermining local governors and nobles.</li>
+    <li><strong>Palace of Versailles:</strong> nobles were required to live at court, kept busy with ritual and away from their regional power bases.</li>
+    <li><strong>Revocation of the Edict of Nantes (1685):</strong> ended toleration for Huguenots (French Protestants). Many skilled Huguenots fled France.</li>
+    <li><strong>Jean-Baptiste Colbert</strong>, finance minister, used mercantilist policies to decrease debt, revive domestic industries, expand colonies and create a favorable balance of trade.</li>
+  </ul></div></details>
+
+  <details><summary>3. Russia under Peter the Great</summary><div class="body">
+    <p>Peter wanted to <strong>Westernize</strong> Russia and make it a European great power.</p>
+    <p class="term">Political reform</p>
+    <ul><li>Required nobles to serve in the army or the civil administration.</li><li>Created the <strong>Table of Ranks</strong>: promotion by merit, so experts ended up on top.</li></ul>
+    <p class="term">Religious reform</p>
+    <ul><li>Eliminated the role of <strong>Patriarch</strong> of the Russian Orthodox Church.</li><li>Replaced it with the <strong>Holy Synod</strong>, officials who did Peter's bidding, putting the church under the state.</li></ul>
+  </div></details>
+
+  <details><summary>4. England: the road to constitutionalism</summary><div class="body"><ul>
+    <li><strong>James I and Charles I</strong> (Stuarts) believed in divine right and clashed with Parliament over taxes and religion.</li>
+    <li><strong>Puritans</strong> in Parliament opposed Charles's religious policies and his attempts to rule without Parliament.</li>
+    <li><strong>English Civil War (1642–1649):</strong> Parliament beat the royalists; Charles I was executed in 1649.</li>
+    <li><strong>Oliver Cromwell</strong> ruled as Lord Protector; his rule became an unpopular military dictatorship.</li>
+    <li><strong>Restoration (1660):</strong> monarchy restored under Charles II.</li>
+    <li><strong>Glorious Revolution (1688):</strong> James II pushed out and replaced by William and Mary without major bloodshed. The <strong>English Bill of Rights (1689)</strong> limited the monarch and secured Parliament's power: a constitutional monarchy.</li>
+  </ul></div></details>
+
+  <details><summary>5. The Dutch Republic</summary><div class="body"><ul>
+    <li>Grew out of the Protestant revolt against Catholic Spain (including iconoclastic attacks on Catholic churches like Antwerp's in 1566).</li>
+    <li>Became one of Europe's wealthiest commercial empires in its <strong>Golden Age</strong>.</li>
+    <li>Governed as an <strong>oligarchy</strong>: a republic run by wealthy merchant elites, not a king.</li>
+    <li>Known for relative religious toleration and for trade and finance: the Dutch East India Company and the Amsterdam banking system.</li>
+  </ul></div></details>
+
+  <details><summary>6. Balance of power</summary><div class="body">
+    <p><strong>Key idea:</strong> after Westphalia, the main reason for wars was to maintain the balance of power so no single state could dominate.</p>
+    <ul>
+      <li><strong>Dutch War (1672–1678):</strong> Louis XIV attacked the Dutch Republic; other states joined to check France.</li>
+      <li><strong>Partitions of Poland (1772–1795):</strong> Poland-Lithuania had a weak elected monarchy and no strong central state, so Russia, Prussia and Austria carved it up until it vanished. The cost of failing to centralize.</li>
+      <li><strong>War of the Spanish Succession (1701–1714):</strong> Louis XIV's grandson Philip V inherited Spain, raising fears of a France-Spain superpower.
+        <ul>
+          <li>Grand Alliance: England, the Dutch, Austria, Prussia vs. France, Spain, Bavaria.</li>
+          <li><strong>Treaty of Utrecht (1713):</strong> Philip kept Spain, but the French and Spanish crowns could never be united.</li>
+        </ul></li>
+      <li><strong>Military revolution:</strong> large standing armies, new tactics and fortifications. States that expanded their militaries ended up on the winning side.</li>
+    </ul>
+  </div></details>
+
+  <details><summary>7. The Agricultural Revolution</summary><div class="body"><ul>
+    <li>The old <strong>three-field system</strong> left a third of the land unused each year.</li>
+    <li>New methods: <strong>crop rotation</strong> (clover, turnips), the <strong>seed drill</strong>, the improved cast-iron plow.</li>
+    <li><strong>Enclosure</strong> of common lands consolidated farms and pushed many peasants toward wage work.</li>
+    <li>Columbian Exchange crops, especially the <strong>potato</strong>, increased calories and drove population growth.</li>
+  </ul></div></details>
+
+  <details><summary>8. Economic developments</summary><div class="body"><ul>
+    <li><strong>Cottage industry:</strong> goods made mainly in people's homes before factories.</li>
+    <li><strong>Putting-out system:</strong> merchants supplied raw materials to rural families, who made finished goods at home and were paid per piece.</li>
+    <li><strong>Banking:</strong> banks kept only part of deposits and loaned the rest as venture capital, repaid with interest.</li>
+    <li><strong>Insurance:</strong> for a premium, insurers covered catastrophic losses, making risky ventures like overseas trade more attractive.</li>
+    <li><strong>Mercantilism:</strong> a nation grows strong by increasing its gold and silver and running a favorable balance of trade. Colonies supplied raw materials and bought finished goods.</li>
+    <li><strong>Colonial empires:</strong> Britain, France, Portugal, Spain and the Netherlands competed for overseas territory.</li>
+  </ul></div></details>
+
+  <details><summary>9. The Atlantic slave trade &amp; consumer culture</summary><div class="body"><ul>
+    <li><strong>Atlantic slave trade:</strong> millions of enslaved Africans were forcibly transported to the Americas to work plantations.</li>
+    <li><strong>Middle Passage:</strong> the brutal Atlantic crossing, with very high death rates.</li>
+    <li><strong>Triangular trade:</strong> manufactured goods Europe → Africa; enslaved people Africa → Americas; cash crops (sugar, tobacco, cotton) Americas → Europe.</li>
+    <li><strong>Consumer culture:</strong> sugar, coffee, tea and tobacco became everyday purchases for ordinary Europeans, fueling demand and trade.</li>
+  </ul></div></details>
+
+  <details><summary>Key terms checklist</summary><div class="body">
+    <table id="termsTable"><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody></tbody></table>
+  </div></details>
+
+  <div class="row" style="margin-top:20px"><span class="spacer"></span><a href="#flashcards"><button class="primary">Drill the key terms →</button></a></div>
+</section>
+
+<!-- ================= FLASHCARDS ================= -->
+<section id="view-flashcards" class="view">
+  <div class="row">
+    <h2 style="margin:0">Flashcards</h2><span class="spacer"></span>
+    <select id="fcMode" aria-label="Card direction">
+      <option value="term">Show term first</option>
+      <option value="def">Show definition first</option>
+    </select>
+    <select id="fcFilter" aria-label="Which cards">
+      <option value="all">All cards</option>
+      <option value="learning">Still learning only</option>
+    </select>
+    <button id="fcShuffle">Shuffle</button>
+  </div>
+  <div class="progress"><div id="fcBar"></div></div>
+  <p class="muted small" id="fcStatus"></p>
+  <div class="flash" id="flash" tabindex="0" role="button" aria-label="Flip card">
+    <div class="flash-inner">
+      <div class="face front"><span class="label" id="fcFrontLabel">Term</span><div id="fcFront" class="big"></div></div>
+      <div class="face back"><span class="label" id="fcBackLabel">Definition</span><div id="fcBack" class="def"></div></div>
+    </div>
+  </div>
+  <div class="row">
+    <button id="fcPrev">← Prev</button>
+    <span class="spacer"></span>
+    <button id="fcLearning">Still learning</button>
+    <button id="fcKnow" class="primary">I know it ✓</button>
+    <span class="spacer"></span>
+    <button id="fcNext">Next →</button>
+  </div>
+  <p class="muted small" style="margin-top:14px">Tip: click the card or press <kbd>Space</kbd> to flip, <kbd>←</kbd>/<kbd>→</kbd> to move.</p>
+</section>
+
+<!-- ================= QUIZ ================= -->
+<section id="view-quiz" class="view">
+  <div id="quizStart" class="card">
+    <h2>Multiple-choice quiz</h2>
+    <p class="muted">Each answer comes with an explanation. Missed questions are listed at the end for review.</p>
+    <div class="row">
+      <label for="qTopic">Topic</label>
+      <select id="qTopic"></select>
+      <label for="qCount">Questions</label>
+      <select id="qCount"><option value="10">10</option><option value="20">20</option><option value="999">All</option></select>
+      <span class="spacer"></span>
+      <button class="primary" id="qBegin">Start quiz</button>
+    </div>
+    <p class="muted small" id="qBest" style="margin-bottom:0"></p>
+  </div>
+
+  <div id="quizRun" class="card" hidden>
+    <div class="row"><span class="pill" id="qTopicPill"></span><span class="spacer"></span><span class="muted small" id="qCounter"></span></div>
+    <div class="progress"><div id="qBar"></div></div>
+    <h3 id="qText" style="font-size:19px"></h3>
+    <div class="choices" id="qChoices"></div>
+    <div id="qFeedback"></div>
+    <div class="row"><span class="muted small">Keys 1–4 to answer, Enter for next</span><span class="spacer"></span><button class="primary" id="qNext" hidden>Next →</button></div>
+  </div>
+
+  <div id="quizDone" class="card" hidden>
+    <div class="row" style="align-items:flex-end">
+      <div><div class="muted small">Your score</div><div class="score-big" id="qScore"></div></div>
+      <div class="muted" id="qPct" style="padding-bottom:6px"></div>
+      <span class="spacer"></span>
+      <button id="qRetryMissed">Retry missed</button>
+      <button class="primary" id="qAgain">New quiz</button>
+    </div>
+    <div id="qMissed" style="margin-top:16px"></div>
+  </div>
+</section>
+
+<!-- ================= TIMELINE ================= -->
+<section id="view-timeline" class="view">
+  <div class="card">
+    <h2>Put it in order</h2>
+    <p class="muted">Use the arrows to arrange these events from earliest (top) to latest (bottom), then check your answer.</p>
+    <div id="tlList"></div>
+    <div class="row" style="margin-top:12px">
+      <span id="tlResult" class="muted"></span><span class="spacer"></span>
+      <button id="tlShuffle">Shuffle</button>
+      <button class="primary" id="tlCheck">Check order</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRACTICE ================= -->
+<section id="view-practice" class="view">
+  <h2>Short-answer practice</h2>
+  <p class="muted">Write your answer first, then reveal the key points and check off what you covered. Your answers stay in this browser.</p>
+  <div id="practiceList"></div>
+</section>
+
+</main>
+<footer>AP Euro Unit 3 study site · Unit 3 is about 10–15% of the AP exam</footer>
+
+<script>
+/* ---------------- DATA ---------------- */
+const TERMS = [
+  ["Absolutism", "Monarch holds all state power"],
+  ["Constitutionalism", "Monarch's power limited by law and a parliament"],
+  ["Divine right of kings", "Kings get authority from God"],
+  ["Peace of Westphalia (1648)", "Ended the Thirty Years' War; launched the era of state-building"],
+  ["Intendant system", "Royal agents that weakened local nobles in France"],
+  ["Versailles", "Louis XIV's palace for controlling the nobility"],
+  ["Colbert", "Louis XIV's mercantilist finance minister"],
+  ["Table of Ranks", "Peter the Great's merit-based ranking system"],
+  ["Holy Synod", "State-controlled body replacing the Russian Patriarch"],
+  ["Puritans", "Reform Protestants who opposed Charles I"],
+  ["Oliver Cromwell", "Led Parliament's side; Lord Protector"],
+  ["Restoration", "Return of the monarchy in 1660"],
+  ["Glorious Revolution", "Bloodless 1688 overthrow of James II"],
+  ["English Bill of Rights", "1689 limits on the English monarchy"],
+  ["Oligarchy", "Rule by a small, wealthy elite (Dutch Republic)"],
+  ["Balance of power", "No single state should dominate Europe"],
+  ["War of the Spanish Succession", "War to stop a France-Spain union"],
+  ["Three-field system", "Old rotation leaving a third of land unused"],
+  ["Enclosure", "Fencing in common lands into private farms"],
+  ["Cottage industry / putting-out system", "Home-based production organized by merchants"],
+  ["Mercantilism", "Build national wealth in gold and a trade surplus"],
+  ["Triangular trade", "Europe–Africa–Americas trade loop"],
+  ["Middle Passage", "Atlantic crossing of enslaved Africans"],
+  ["Consumer culture", "Rising everyday demand for colonial goods"]
+];
+
+// [topic, question, [choices], correctIndex, explanation]
+const QUESTIONS = [
+  ["Big idea", "The Peace of Westphalia (1648) ended which conflict?", ["The Hundred Years' War", "The Thirty Years' War", "The War of the Spanish Succession", "The English Civil War"], 1, "Westphalia ended the Thirty Years' War, the last great religious war, and opened the era of state-building."],
+  ["Big idea", "Which best describes absolutism?", ["Power shared between a king and an elected parliament", "A monarch consolidating all state power under themselves", "Rule by a council of wealthy merchants", "A church ruling the state directly"], 1, "Absolutist monarchs concentrated all state power in their own hands to advance the needs of the state."],
+  ["Big idea", "Which state is the best example of constitutionalism in this period?", ["Russia under Peter the Great", "France under Louis XIV", "England after 1688", "Prussia"], 2, "After the Glorious Revolution and the 1689 Bill of Rights, England's monarch was limited by law and Parliament."],
+  ["Rise of absolutism", "The 'divine right of kings' held that a monarch:", ["Was chosen by the nobility", "Received authority directly from God and answered to no earthly body", "Had to obey the Pope in all things", "Could be removed by Parliament"], 1, "Divine right meant the king's authority came from God, so no earthly body could check him."],
+  ["Rise of absolutism", "Why did many merchants support absolute monarchs?", ["Monarchs abolished all taxes", "They wanted the economic and political stability a strong monarch provided", "Monarchs gave them noble titles automatically", "They wanted to restore Catholic power"], 1, "The expanding merchant class wanted stability for trade, so power shifted from the landed nobility toward merchants allied with the crown."],
+  ["Rise of absolutism", "Which was a reason absolutism took root after 1648?", ["The Catholic Church's influence weakened", "Feudal nobles grew stronger", "Religious wars intensified", "Global trade declined"], 0, "With growing tolerance of Protestantism and little appetite for religious war, the Church's influence weakened and states filled the gap."],
+  ["France", "What experience convinced young Louis XIV never to let the nobility threaten him again?", ["The Glorious Revolution", "The Fronde", "The St. Bartholomew's Day Massacre", "The Dutch War"], 1, "The Fronde, noble revolts during Cardinal Mazarin's regency, shaped Louis's determination to control the nobles."],
+  ["France", "What was the main purpose of the intendant system?", ["To train priests for the Catholic Church", "To send royal officials to the provinces to collect taxes and enforce the king's will", "To elect provincial representatives to a parliament", "To manage overseas colonies"], 1, "Intendants were royal agents who undermined local governors and nobles."],
+  ["France", "How did Versailles help Louis XIV control the nobility?", ["It served as a prison for rebellious nobles", "Nobles were required to live at court, busy with ritual and away from their regional power bases", "It housed a parliament that nobles controlled", "It was given to the nobles as a gift"], 1, "Keeping nobles at Versailles separated them from their local bases of power."],
+  ["France", "What was a major result of the revocation of the Edict of Nantes (1685)?", ["France became officially Protestant", "Many skilled Huguenots fled France", "The Pope lost influence in France", "Louis XIV was overthrown"], 1, "Ending toleration for Huguenots enforced religious unity but drove many skilled Protestants out of France."],
+  ["France", "Jean-Baptiste Colbert is best known for:", ["Leading the Fronde", "Mercantilist policies as Louis XIV's finance minister", "Writing the English Bill of Rights", "Founding the Dutch East India Company"], 1, "Colbert cut debt, revived industry, expanded colonies and pursued a favorable balance of trade."],
+  ["Russia", "What was Peter the Great's main goal?", ["To make Russia a constitutional monarchy", "To Westernize Russia and make it a European great power", "To return Russia to Catholicism", "To abolish the Russian army"], 1, "Peter modeled reforms on Western Europe to make Russia a great power."],
+  ["Russia", "The Table of Ranks was designed to:", ["Rank nobles by family age", "Base promotion on merit so experts rose to the top", "Rank cities by population", "Determine church hierarchy"], 1, "The Table of Ranks tied status to service and merit, not just birth."],
+  ["Russia", "How did Peter the Great bring the Russian Orthodox Church under state control?", ["He converted Russia to Protestantism", "He eliminated the Patriarch and created the Holy Synod", "He made himself Pope", "He revoked the Edict of Nantes"], 1, "The Holy Synod was filled with officials who did Peter's bidding."],
+  ["Russia", "Peter the Great required nobles to:", ["Live at Versailles", "Serve in the army or civil administration", "Pay no taxes", "Elect the tsar"], 1, "Mandatory state service tied the nobility to the needs of the state."],
+  ["England", "Over what did James I and Charles I mainly clash with Parliament?", ["Overseas colonies", "Taxes and religion", "The slave trade", "The Partitions of Poland"], 1, "The Stuarts believed in divine right and fought Parliament over taxation and religious policy."],
+  ["England", "What happened to Charles I in 1649?", ["He was restored to the throne", "He was executed after Parliament won the civil war", "He fled to France", "He signed the Bill of Rights"], 1, "Parliament's forces defeated the royalists and executed Charles I."],
+  ["England", "Oliver Cromwell's rule as Lord Protector is best described as:", ["A popular constitutional monarchy", "An unpopular military dictatorship", "A Catholic theocracy", "A merchant oligarchy"], 1, "Cromwell's Protectorate became a military dictatorship, paving the way for the Restoration."],
+  ["England", "The Restoration (1660) brought which monarch to power?", ["James II", "William III", "Charles II", "Charles I"], 2, "The monarchy was restored under Charles II."],
+  ["England", "What was the Glorious Revolution (1688)?", ["A bloody revolt against Cromwell", "The largely bloodless replacement of James II by William and Mary", "The execution of Charles I", "A Puritan uprising in Scotland"], 1, "James II was pushed out and replaced by William and Mary without major bloodshed."],
+  ["England", "The English Bill of Rights (1689) did what?", ["Gave the king divine right", "Limited the monarch and secured Parliament's power", "Abolished the monarchy", "Established Catholicism as the state religion"], 1, "It made England a constitutional monarchy."],
+  ["England", "Who in Parliament most strongly opposed Charles I's religious policies?", ["Huguenots", "Jesuits", "Puritans", "Anabaptists"], 2, "Puritans, reform-minded Protestants, opposed Charles's religious policies and his attempts to rule without Parliament."],
+  ["Dutch Republic", "How was the Dutch Republic governed?", ["As an absolute monarchy", "As an oligarchy run by wealthy merchant elites", "As a theocracy", "As a direct democracy"], 1, "Wealthy merchant elites, not a king, ran the republic."],
+  ["Dutch Republic", "The Dutch Republic grew out of a revolt against:", ["Catholic Spain", "Protestant England", "Louis XIV's France", "The Holy Roman Emperor's Lutheran princes"], 0, "The Protestant Dutch revolted against Catholic Spain."],
+  ["Dutch Republic", "The Dutch Golden Age was especially known for:", ["Strict religious uniformity", "Trade, finance and relative religious toleration", "A large serf-based economy", "Rejecting overseas trade"], 1, "Think Dutch East India Company, the Amsterdam banking system and relative toleration."],
+  ["Balance of power", "After Westphalia, what was the main reason European states went to war?", ["To spread their religion", "To maintain the balance of power", "To end the slave trade", "To restore the Holy Roman Empire"], 1, "Wars aimed to keep any single state from dominating Europe."],
+  ["Balance of power", "What triggered the War of the Spanish Succession?", ["Louis XIV's grandson Philip V inherited the Spanish throne", "Spain invaded England", "The Dutch declared independence", "Peter the Great attacked Sweden"], 0, "A Bourbon on the Spanish throne raised fears of a combined France-Spain superpower."],
+  ["Balance of power", "Under the Treaty of Utrecht (1713):", ["France annexed Spain", "Philip kept Spain, but the French and Spanish crowns could never be united", "Spain was divided between Austria and Prussia", "Philip lost the Spanish throne"], 1, "The compromise preserved the balance of power."],
+  ["Balance of power", "Which state fought AGAINST the Grand Alliance in the War of the Spanish Succession?", ["England", "Austria", "Bavaria", "The Dutch Republic"], 2, "France, Spain and Bavaria faced the Grand Alliance of England, the Dutch, Austria and Prussia."],
+  ["Balance of power", "Why did Poland disappear from the map by 1795?", ["It was conquered by France", "Its weak elected monarchy and lack of a strong central state let Russia, Prussia and Austria partition it", "It voluntarily merged with Sweden", "A plague wiped out its population"], 1, "Poland shows the cost of failing to centralize."],
+  ["Balance of power", "In the Dutch War (1672–1678):", ["The Dutch invaded England", "Louis XIV attacked the Dutch Republic and other states joined to check France", "Spain and the Dutch united against Austria", "Russia attacked Poland"], 1, "Other states joined the Dutch to stop French expansion."],
+  ["Balance of power", "The 'military revolution' refers to:", ["The abolition of standing armies", "Large standing armies with new tactics and fortifications", "The replacement of armies with mercenaries only", "Peace treaties banning war"], 1, "States that built up their militaries this way ended up on the winning side of the balance of power."],
+  ["Agricultural Revolution", "What was the main weakness of the three-field system?", ["It required too many workers", "A third of the land went unused each year", "It only grew potatoes", "It depended on slave labor"], 1, "Leaving a third of the land fallow limited output."],
+  ["Agricultural Revolution", "Which crops were used in rotation to restore the soil?", ["Wheat and barley", "Clover and turnips", "Sugar and cotton", "Coffee and tea"], 1, "Clover and turnips replenished soil so land didn't have to sit fallow."],
+  ["Agricultural Revolution", "What was a major effect of enclosure?", ["More common land for peasants", "Many peasants were pushed off the land toward wage work", "The return of the three-field system", "Decreased food production"], 1, "Consolidating farms displaced peasants, creating a workforce for wage labor."],
+  ["Agricultural Revolution", "Which Columbian Exchange crop most helped drive European population growth?", ["Tobacco", "The potato", "Sugar cane", "Coffee"], 1, "The calorie-rich potato boosted nutrition and population."],
+  ["Economy", "In the putting-out system:", ["Workers commuted to large factories", "Merchants supplied raw materials to rural families who made goods at home for piece pay", "Guilds controlled all production in cities", "The state owned all workshops"], 1, "This was home-based production organized by merchants."],
+  ["Economy", "How did banks of this era make money from deposits?", ["They kept all deposits locked in vaults", "They kept part of deposits and loaned the rest as venture capital for interest", "They gave deposits to the king", "They only exchanged foreign currency"], 1, "Lending out part of deposits funded new ventures."],
+  ["Economy", "Why did insurance encourage overseas trade?", ["It guaranteed profits", "It covered catastrophic losses for a premium, making risky ventures more attractive", "It was required by the Church", "It eliminated taxes on imports"], 1, "Spreading risk made merchants more willing to invest in long voyages."],
+  ["Economy", "Mercantilism holds that a nation grows strong by:", ["Free trade with no tariffs", "Increasing its gold and silver and exporting more than it imports", "Abolishing colonies", "Importing more than it exports"], 1, "A favorable balance of trade built national wealth; colonies supplied raw materials and bought finished goods."],
+  ["Slave trade & consumer culture", "What was the Middle Passage?", ["A trade route through the Mediterranean", "The brutal Atlantic crossing of enslaved Africans", "A road through the Alps", "The route from Europe to Asia"], 1, "The Middle Passage had very high death rates."],
+  ["Slave trade & consumer culture", "In the triangular trade, what went from the Americas to Europe?", ["Manufactured goods", "Enslaved people", "Cash crops like sugar, tobacco and cotton", "Gold from Africa"], 2, "Europe → Africa: manufactured goods; Africa → Americas: enslaved people; Americas → Europe: cash crops."],
+  ["Slave trade & consumer culture", "Consumer culture in this era refers to:", ["Nobles buying luxury art only", "Ordinary Europeans regularly buying colonial goods like sugar, coffee, tea and tobacco", "The end of trade with the colonies", "Government rationing of food"], 1, "Rising everyday demand fueled trade and colonial expansion."]
+];
+
+const EVENTS = [
+  ["English Civil War begins", 1642],
+  ["Peace of Westphalia", 1648],
+  ["Execution of Charles I", 1649],
+  ["Restoration of Charles II", 1660],
+  ["Dutch War begins", 1672],
+  ["Revocation of the Edict of Nantes", 1685],
+  ["Glorious Revolution", 1688],
+  ["English Bill of Rights", 1689],
+  ["War of the Spanish Succession begins", 1701],
+  ["Treaty of Utrecht", 1713],
+  ["First Partition of Poland", 1772]
+];
+
+const PRACTICE = [
+  ["Explain two reasons absolutism rose in the late 1600s.",
+   ["The Catholic Church's influence weakened (growing tolerance of Protestantism, little appetite for religious war after Westphalia), so the state filled the gap",
+    "The merchant class expanded with global trade and backed monarchs who could provide economic and political stability",
+    "Power shifted away from the landed nobility toward the merchants and the crown",
+    "Divine right of kings justified monarchs answering to no earthly body"]],
+  ["How did Louis XIV use Versailles and the intendant system to weaken the nobility?",
+   ["Versailles: nobles were required to live at court, kept busy with ritual and away from their regional power bases",
+    "Intendants: royal officials sent to the provinces to collect taxes and enforce the king's will",
+    "Intendants undermined the authority of local governors and nobles",
+    "Context: the Fronde convinced Louis never to let the nobility threaten him again"]],
+  ["Compare how Louis XIV and Peter the Great brought the church under state control.",
+   ["Louis XIV revoked the Edict of Nantes (1685), ending toleration for Huguenots and enforcing religious unity under the king",
+    "Peter the Great eliminated the role of Patriarch and created the Holy Synod, staffed by officials loyal to him",
+    "Similarity: both subordinated religion to the needs of the absolutist state",
+    "Difference: Louis enforced religious uniformity (driving out Protestants); Peter restructured the church's leadership itself"]],
+  ["Why did England end up as a constitutional monarchy while France became absolutist?",
+   ["English Stuarts (James I, Charles I) clashed with a strong Parliament over taxes and religion",
+    "Puritans in Parliament resisted; Parliament won the Civil War and executed Charles I (1649)",
+    "Glorious Revolution (1688) and the English Bill of Rights (1689) limited the monarch and secured Parliament's power",
+    "In France, Louis XIV neutralized the nobility (Versailles, intendants) and faced no comparable representative body"]],
+  ["Explain how the War of the Spanish Succession reflects the balance-of-power idea.",
+   ["Louis XIV's grandson Philip V inherited Spain, raising fears of a combined France-Spain superpower",
+    "The Grand Alliance (England, Dutch, Austria, Prussia) formed to stop one state from dominating",
+    "Treaty of Utrecht (1713): Philip kept Spain, but the French and Spanish crowns could never be united",
+    "Shows that after Westphalia wars were fought mainly to keep any one state from dominating Europe"]],
+  ["How did the Agricultural Revolution contribute to the putting-out system and later industrialization?",
+   ["Crop rotation, the seed drill and better plows raised food output; the potato added calories",
+    "More food supported population growth",
+    "Enclosure pushed many peasants off the land toward wage work",
+    "That rural labor supply fed the putting-out system (merchants supplying materials to rural homes), and later the factory workforce"]],
+  ["Explain how mercantilism connected to colonial expansion and the triangular trade.",
+   ["Mercantilism: national wealth comes from gold/silver and a favorable balance of trade",
+    "Colonies supplied raw materials and bought finished goods from the home country",
+    "Triangular trade: manufactured goods to Africa, enslaved people to the Americas, cash crops (sugar, tobacco, cotton) to Europe",
+    "Example: Colbert's mercantilism expanded France's colonial holdings; European powers competed for overseas empires"]],
+  ["Why did Poland disappear from the map while its neighbors grew stronger?",
+   ["Poland-Lithuania had a weak elected monarchy and no strong central state",
+    "Its neighbors Russia, Prussia and Austria were centralized absolutist states with strong militaries",
+    "Those neighbors partitioned Poland (1772–1795) until it vanished from the map",
+    "Shows the cost of failing to centralize in an age of state-building"]]
+];
+
+/* ---------------- STORAGE (optional) ---------------- */
+const store = {
+  get(k, d) { try { const v = localStorage.getItem("apeu3-" + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem("apeu3-" + k, JSON.stringify(v)); } catch (e) {} }
+};
+const $ = s => document.querySelector(s);
+const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+/* ---------------- ROUTING ---------------- */
+const VIEWS = ["notes", "flashcards", "quiz", "timeline", "practice"];
+function route() {
+  const h = location.hash.slice(1);
+  const v = VIEWS.includes(h) ? h : "notes";
+  VIEWS.forEach(n => $("#view-" + n).classList.toggle("active", n === v));
+  document.querySelectorAll("#nav a").forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + v));
+  window.scrollTo(0, 0);
+}
+window.addEventListener("hashchange", route);
+
+/* ---------------- TERMS TABLE ---------------- */
+$("#termsTable tbody").innerHTML = TERMS.map(([t, d]) => `<tr><td class="term">${esc(t)}</td><td>${esc(d)}</td></tr>`).join("");
+
+/* ---------------- FLASHCARDS ---------------- */
+let known = new Set(store.get("known", []));
+let fcDeck = TERMS.map((_, i) => i), fcPos = 0;
+function fcBuild() {
+  const filter = $("#fcFilter").value;
+  fcDeck = TERMS.map((_, i) => i).filter(i => filter === "all" || !known.has(i));
+  fcPos = 0; fcRender();
+}
+function fcRender() {
+  const card = $("#flash"); card.classList.remove("flipped");
+  $("#fcBar").style.width = (known.size / TERMS.length * 100) + "%";
+  $("#fcStatus").textContent = `${known.size} of ${TERMS.length} terms marked as known`;
+  if (!fcDeck.length) {
+    $("#fcFront").textContent = "🎉 You know them all!"; $("#fcBack").textContent = "Switch to “All cards” to review again.";
+    return;
+  }
+  const [t, d] = TERMS[fcDeck[fcPos]];
+  const termFirst = $("#fcMode").value === "term";
+  $("#fcFront").textContent = termFirst ? t : d; $("#fcBack").textContent = termFirst ? d : t;
+  $("#fcFront").className = termFirst ? "big" : "def"; $("#fcBack").className = termFirst ? "def" : "big";
+  $("#fcFrontLabel").textContent = (termFirst ? "Term" : "Definition") + ` · ${fcPos + 1}/${fcDeck.length}` + (known.has(fcDeck[fcPos]) ? " · ✓ known" : "");
+  $("#fcBackLabel").textContent = termFirst ? "Definition" : "Term";
+}
+function fcMove(d) { if (!fcDeck.length) return; fcPos = (fcPos + d + fcDeck.length) % fcDeck.length; fcRender(); }
+function fcMark(k) {
+  if (!fcDeck.length) return;
+  const i = fcDeck[fcPos];
+  k ? known.add(i) : known.delete(i); store.set("known", [...known]);
+  if ($("#fcFilter").value === "learning" && k) { fcDeck.splice(fcPos, 1); if (fcPos >= fcDeck.length) fcPos = 0; fcRender(); }
+  else fcMove(1);
+}
+$("#flash").addEventListener("click", () => $("#flash").classList.toggle("flipped"));
+$("#fcPrev").onclick = () => fcMove(-1);
+$("#fcNext").onclick = () => fcMove(1);
+$("#fcKnow").onclick = () => fcMark(true);
+$("#fcLearning").onclick = () => fcMark(false);
+$("#fcShuffle").onclick = () => { fcDeck = shuffle(fcDeck); fcPos = 0; fcRender(); };
+$("#fcMode").onchange = fcRender;
+$("#fcFilter").onchange = fcBuild;
+
+/* ---------------- QUIZ ---------------- */
+const topics = [...new Set(QUESTIONS.map(q => q[0]))];
+$("#qTopic").innerHTML = `<option value="all">All topics (${QUESTIONS.length})</option>` +
+  topics.map(t => `<option value="${esc(t)}">${esc(t)} (${QUESTIONS.filter(q => q[0] === t).length})</option>`).join("");
+let qSet = [], qIdx = 0, qRight = 0, qMissed = [], qAnswered = false;
+function showBest() { const b = store.get("best", null); $("#qBest").textContent = b ? `Best score so far: ${b}%` : ""; }
+function startQuiz(list) {
+  qSet = list.map(q => { const order = shuffle([0, 1, 2, 3]); return { topic: q[0], text: q[1], choices: order.map(i => q[2][i]), answer: order.indexOf(q[3]), why: q[4], src: q }; });
+  qIdx = 0; qRight = 0; qMissed = [];
+  $("#quizStart").hidden = true; $("#quizDone").hidden = true; $("#quizRun").hidden = false;
+  showQ();
+}
+function showQ() {
+  const q = qSet[qIdx]; qAnswered = false;
+  $("#qTopicPill").textContent = q.topic;
+  $("#qCounter").textContent = `Question ${qIdx + 1} of ${qSet.length} · ${qRight} correct`;
+  $("#qBar").style.width = (qIdx / qSet.length * 100) + "%";
+  $("#qText").textContent = q.text;
+  $("#qChoices").innerHTML = q.choices.map((c, i) => `<button class="choice" data-i="${i}"><span class="key">${"ABCD"[i]}</span><span>${esc(c)}</span></button>`).join("");
+  $("#qFeedback").innerHTML = ""; $("#qNext").hidden = true;
+  $("#qChoices").querySelectorAll(".choice").forEach(b => b.onclick = () => answer(+b.dataset.i));
+}
+function answer(i) {
+  if (qAnswered) return; qAnswered = true;
+  const q = qSet[qIdx], ok = i === q.answer, btns = $("#qChoices").querySelectorAll(".choice");
+  btns.forEach((b, j) => { b.disabled = true; if (j === q.answer) b.classList.add("correct"); else if (j === i) b.classList.add("wrong"); });
+  if (ok) qRight++; else qMissed.push({ q, picked: i });
+  $("#qFeedback").innerHTML = `<div class="feedback ${ok ? "good" : "bad"}"><strong>${ok ? "Correct!" : "Not quite. The answer is " + "ABCD"[q.answer] + "."}</strong>${esc(q.why)}</div>`;
+  $("#qCounter").textContent = `Question ${qIdx + 1} of ${qSet.length} · ${qRight} correct`;
+  $("#qNext").hidden = false; $("#qNext").textContent = qIdx + 1 < qSet.length ? "Next →" : "See results";
+  $("#qNext").focus();
+}
+function nextQ() { if (++qIdx < qSet.length) showQ(); else finishQuiz(); }
+function finishQuiz() {
+  $("#quizRun").hidden = true; $("#quizDone").hidden = false;
+  const pct = Math.round(qRight / qSet.length * 100);
+  if (pct > store.get("best", -1)) store.set("best", pct);
+  $("#qScore").textContent = `${qRight}/${qSet.length}`;
+  $("#qPct").textContent = `${pct}% · ${pct >= 90 ? "Excellent, you're exam-ready on this set." : pct >= 70 ? "Solid. Review the misses below." : "Keep going: reread the notes for the topics you missed."}`;
+  $("#qRetryMissed").hidden = !qMissed.length;
+  $("#qMissed").innerHTML = qMissed.length ? `<h3>Review what you missed</h3>` + qMissed.map(({ q, picked }) =>
+    `<div class="missed"><span class="pill">${esc(q.topic)}</span><p style="margin:8px 0 4px"><strong>${esc(q.text)}</strong></p>
+     <p class="small" style="margin:0">Your answer: <span style="color:var(--bad)">${esc(q.choices[picked])}</span><br>Correct: <span style="color:var(--good)">${esc(q.choices[q.answer])}</span></p>
+     <p class="small muted" style="margin:4px 0 0">${esc(q.why)}</p></div>`).join("") : `<p>Perfect score, nothing to review! 🎉</p>`;
+}
+$("#qBegin").onclick = () => {
+  const t = $("#qTopic").value, n = +$("#qCount").value;
+  startQuiz(shuffle(QUESTIONS.filter(q => t === "all" || q[0] === t)).slice(0, n));
+};
+$("#qNext").onclick = nextQ;
+$("#qAgain").onclick = () => { $("#quizDone").hidden = true; $("#quizStart").hidden = false; showBest(); };
+$("#qRetryMissed").onclick = () => startQuiz(shuffle(qMissed.map(m => m.q.src)));
+
+/* ---------------- TIMELINE ---------------- */
+let tlOrder = [];
+function tlShuffle() {
+  do { tlOrder = shuffle(EVENTS.map((_, i) => i)); } while (tlOrder.every((v, i) => v === i));
+  tlRender(false); $("#tlResult").textContent = "";
+}
+function tlRender(checked) {
+  $("#tlList").innerHTML = tlOrder.map((e, pos) => {
+    const cls = checked ? (EVENTS[e][1] === EVENTS[[...tlOrder].sort((a, b) => EVENTS[a][1] - EVENTS[b][1])[pos]][1] ? "ok" : "no") : "";
+    return `<div class="tl-item ${cls}"><span class="num">${pos + 1}</span><span class="txt">${esc(EVENTS[e][0])}${checked ? ` <span class="yr muted">(${EVENTS[e][1]})</span>` : ""}</span>
+      <button data-p="${pos}" data-d="-1" aria-label="Move up" ${pos === 0 ? "disabled" : ""}>↑</button>
+      <button data-p="${pos}" data-d="1" aria-label="Move down" ${pos === tlOrder.length - 1 ? "disabled" : ""}>↓</button></div>`;
+  }).join("");
+  $("#tlList").querySelectorAll("button").forEach(b => b.onclick = () => {
+    const p = +b.dataset.p, q = p + +b.dataset.d;
+    [tlOrder[p], tlOrder[q]] = [tlOrder[q], tlOrder[p]];
+    tlRender(false); $("#tlResult").textContent = "";
+  });
+}
+$("#tlShuffle").onclick = tlShuffle;
+$("#tlCheck").onclick = () => {
+  tlRender(true);
+  const sorted = [...tlOrder].sort((a, b) => EVENTS[a][1] - EVENTS[b][1]);
+  const right = tlOrder.filter((e, i) => EVENTS[e][1] === EVENTS[sorted[i]][1]).length;
+  $("#tlResult").textContent = right === EVENTS.length ? "🎉 Perfect order!" : `${right} of ${EVENTS.length} in the right spot. Fix the red ones and check again.`;
+};
+
+/* ---------------- PRACTICE ---------------- */
+const drafts = store.get("drafts", {}), checks = store.get("checks", {});
+$("#practiceList").innerHTML = PRACTICE.map(([q, pts], i) => `
+  <div class="card">
+    <h3>${i + 1}. ${esc(q)}</h3>
+    <textarea id="pa${i}" placeholder="Write your answer here…" aria-label="Your answer to question ${i + 1}">${esc(drafts[i] || "")}</textarea>
+    <div class="row" style="margin-top:10px"><span class="muted small" id="pscore${i}"></span><span class="spacer"></span><button data-i="${i}" class="reveal">Show key points</button></div>
+    <div class="model" id="pm${i}" hidden>
+      <p class="small muted" style="margin:0 0 6px">Check off each point your answer covered:</p>
+      ${pts.map((p, j) => `<label class="check"><input type="checkbox" data-i="${i}" data-j="${j}" ${(checks[i] || []).includes(j) ? "checked" : ""}><span>${esc(p)}</span></label>`).join("")}
+    </div>
+  </div>`).join("");
+function pScore(i) {
+  const n = (checks[i] || []).length, tot = PRACTICE[i][1].length;
+  $("#pscore" + i).textContent = n ? `${n}/${tot} key points covered` : "";
+}
+PRACTICE.forEach((_, i) => {
+  pScore(i);
+  $("#pa" + i).addEventListener("input", e => { drafts[i] = e.target.value; store.set("drafts", drafts); });
+});
+document.querySelectorAll(".reveal").forEach(b => b.onclick = () => {
+  const m = $("#pm" + b.dataset.i); m.hidden = !m.hidden; b.textContent = m.hidden ? "Show key points" : "Hide key points";
+});
+document.querySelectorAll(".model input").forEach(c => c.onchange = () => {
+  const i = c.dataset.i, j = +c.dataset.j, s = new Set(checks[i] || []);
+  c.checked ? s.add(j) : s.delete(j); checks[i] = [...s]; store.set("checks", checks); pScore(i);
+});
+
+/* ---------------- KEYBOARD ---------------- */
+document.addEventListener("keydown", e => {
+  if (/TEXTAREA|SELECT|INPUT/.test(e.target.tagName)) return;
+  if (e.target.tagName === "BUTTON" && (e.key === "Enter" || e.key === " ")) return;
+  const v = location.hash.slice(1) || "notes";
+  if (v === "flashcards") {
+    if (e.key === " " || e.key === "Enter") { e.preventDefault(); $("#flash").classList.toggle("flipped"); }
+    if (e.key === "ArrowRight") fcMove(1);
+    if (e.key === "ArrowLeft") fcMove(-1);
+  }
+  if (v === "quiz" && !$("#quizRun").hidden) {
+    if (!qAnswered && ["1", "2", "3", "4", "a", "b", "c", "d"].includes(e.key.toLowerCase())) answer("1234abcd".indexOf(e.key.toLowerCase()) % 4);
+    else if (qAnswered && e.key === "Enter") { e.preventDefault(); nextQ(); }
+  }
+});
+
+/* ---------------- INIT ---------------- */
+fcBuild(); showBest(); tlShuffle(); route();
+</script>
+</body>
+</html>
