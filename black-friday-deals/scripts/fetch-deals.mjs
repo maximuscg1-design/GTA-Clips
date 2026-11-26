@@ -159,7 +159,8 @@ function cleanTitle(title) {
 export function score(deal, now = Date.now()) {
   const ageH = Math.max(0, (now - new Date(deal.postedAt).getTime()) / 36e5);
   const fresh = Math.max(0, 25 - ageH * 0.5);          // up to 25, fades over ~2 days
-  const pct = Math.min(deal.percentOff ?? 0, 90) * 0.7; // up to ~63
+  // "up to X% off" sales are vaguer than a specific price, so they count for less.
+  const pct = Math.min(deal.percentOff ?? 0, 90) * (deal.upTo ? 0.3 : 0.7);
   const bf = deal.blackFriday ? 12 : 0;
   const priced = deal.price != null ? 5 : 0;
   const img = deal.image ? 3 : 0;
@@ -187,6 +188,7 @@ export function buildDeal(item, source) {
     originalPrice: original,
     percentOff: percent,
     blackFriday: isBlackFriday(text),
+    upTo: /up to \d{1,2}\s?%/i.test(title),
     image: /^https?:/.test(item.image) && !/thumbs\.redditmedia.*default|self|nsfw/.test(item.image) ? item.image : null,
     source: source.name,
     sourceId: source.id,

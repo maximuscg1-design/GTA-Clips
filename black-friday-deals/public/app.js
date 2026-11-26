@@ -6,7 +6,9 @@
     "Smart Home": "🏠", "Home & Kitchen": "🍳", "Clothing & Shoes": "👟", "Tools & Outdoor": "🛠️", "Toys": "🧸",
     "Beauty & Health": "💄", "Other": "🏷️",
   };
-  const saved = new Set(JSON.parse(localStorage.getItem("bf-saved") || "[]"));
+  const store = { get: (k) => { try { return localStorage.getItem(k); } catch { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch {} } };
+  let saved;
+  try { saved = new Set(JSON.parse(store.get("bf-saved") || "[]")); } catch { saved = new Set(); }
   let data = { deals: [], sources: [] };
   let shown = PAGE;
 
@@ -77,7 +79,7 @@
     if (els.bfOnly.checked) p.set("bf", "");
     if (els.pricedOnly.checked) p.set("priced", "");
     if (els.savedOnly.checked) p.set("saved", "");
-    history.replaceState(null, "", p.toString() ? `#${p}` : location.pathname);
+    try { history.replaceState(null, "", p.toString() ? `#${p}` : location.pathname); } catch {}
   }
 
   // ---------- filtering ----------
@@ -117,7 +119,7 @@
     node.querySelector(".ph").textContent = CAT_ICON[d.category] || "🏷️";
     if (d.image) { img.src = d.image; img.onerror = () => { img.hidden = true; }; } else img.hidden = true;
     node.querySelector(".store").textContent = d.store || "";
-    node.querySelector(".pct").textContent = d.percentOff ? `-${d.percentOff}%` : "";
+    node.querySelector(".pct").textContent = d.percentOff ? `${d.upTo ? "up to " : ""}-${d.percentOff}%` : "";
     node.querySelector(".bf").hidden = !d.blackFriday;
     const title = node.querySelector(".title");
     title.href = url; title.textContent = d.title;
@@ -134,7 +136,7 @@
     const paint = () => { const on = saved.has(d.id); btn.classList.toggle("on", on); btn.textContent = on ? "★" : "☆"; btn.setAttribute("aria-pressed", on); };
     btn.onclick = () => {
       saved.has(d.id) ? saved.delete(d.id) : saved.add(d.id);
-      localStorage.setItem("bf-saved", JSON.stringify([...saved]));
+      store.set("bf-saved", JSON.stringify([...saved]));
       paint();
       if (els.savedOnly.checked) render();
     };
@@ -170,7 +172,11 @@
       b.onclick = () => { els.category.value = c; render(true); };
       return b;
     }));
-    $("#sampleNotice").hidden = !data.sample;
+    const notice = $("#sampleNotice");
+    notice.hidden = !data.sample && !data.snapshot;
+    if (data.snapshot) {
+      notice.textContent = `Snapshot of real Black Friday deals collected from published roundups on ${new Date(data.generatedAt).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}. Each deal links to the article that reported it. Prices change fast, so check the store before you buy.`;
+    }
     els.updated.textContent = data.generatedAt ? `Updated ${ago(data.generatedAt)}` : "";
     els.updated.title = data.generatedAt ? new Date(data.generatedAt).toLocaleString() : "";
     $("#sourcesList").replaceChildren(...data.sources.map((s) => {
