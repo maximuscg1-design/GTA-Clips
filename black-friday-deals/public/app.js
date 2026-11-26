@@ -16,12 +16,12 @@
 
   const STORE_COLOR = {
     "Amazon": "#ff9900", "Best Buy": "#0046be", "Walmart": "#0071dc", "Target": "#cc0000", "Home Depot": "#f96302",
-    "Newegg": "#e8a200", "Wayfair": "#7f187f", "Lululemon": "#d22030", "PlayStation Store": "#0070d1", "Costco": "#005daa",
+    "Newegg": "#e8a200", "Wayfair": "#7f187f", "Lululemon": "#d22030", "PlayStation Store": "#0070d1", "Costco": "#005daa", "Nike": "#111111", "Kohl's": "#860c32",
   };
   const CAT_HUE = {
     "TVs & Streaming": 220, "Headphones & Audio": 265, "Laptops & Tablets": 200, "Phones & Wearables": 190, "Smart Home": 160,
     "Home & Kitchen": 28, "Gaming": 345, "PC Parts": 140, "Cameras & Drones": 210, "Tools & Outdoor": 38, "Clothing & Shoes": 330,
-    "Beauty & Health": 320, "Gift Cards": 48, "Store-wide sales": 0, "Other": 0,
+    "Beauty & Health": 320, "Gift Cards": 48, "Toys": 52, "Store-wide sales": 0, "Other": 0,
   };
 
   // ---------- illustrations (drawn, so they work anywhere) ----------
@@ -57,6 +57,10 @@
     giftcard: () => `<g transform="rotate(-8 200 130)"><rect x="86" y="56" width="228" height="146" rx="14" fill="url(#gY)"/><rect x="86" y="112" width="228" height="20" fill="url(#gR)"/><rect x="232" y="56" width="20" height="146" fill="url(#gR)"/>${T(150, 100, 34, "$100", "#121214")}</g>`,
     tag: () => `<circle cx="200" cy="130" r="82" fill="url(#gL)"/><circle cx="200" cy="130" r="68" fill="none" stroke="#d0d3d9" stroke-width="2"/><circle cx="200" cy="130" r="10" fill="#d0d3d9"/>`,
     beauty: () => `<rect x="168" y="30" width="64" height="196" rx="32" fill="url(#gL)"/><rect x="162" y="26" width="76" height="66" rx="28" fill="#f6b6c8"/><circle cx="200" cy="140" r="9" fill="#ff6f91"/><circle cx="200" cy="168" r="5" fill="#b9bcc3"/>`,
+    speaker: () => `<ellipse cx="200" cy="200" rx="92" ry="26" fill="url(#gD)"/><path d="M108 200c0-74 40-130 92-130s92 56 92 130z" fill="url(#gD)"/><path d="M120 178c0-60 34-96 80-96s80 36 80 96" fill="none" stroke="#5b5b66" stroke-width="3" stroke-dasharray="2 6"/><ellipse cx="200" cy="200" rx="70" ry="10" fill="#4fc3ff" opacity=".8"/>`,
+    vr: () => `<rect x="76" y="86" width="248" height="112" rx="44" fill="url(#gL)"/><rect x="92" y="104" width="216" height="76" rx="30" fill="url(#gD)"/><circle cx="150" cy="142" r="14" fill="#2a2a30"/><circle cx="250" cy="142" r="14" fill="#2a2a30"/><path d="M76 132c-30 0-40 20-40 40M324 132c30 0 40 20 40 40" fill="none" stroke="#9aa0a8" stroke-width="12" stroke-linecap="round"/>${shine("M104 108h90l-30 30h-60z")}`,
+    monitor: () => `<path d="M40 52q160-26 320 0v132q-160-26-320 0z" fill="url(#gD)"/><path d="M50 62q150-22 300 0v112q-150-22-300 0z" fill="url(#gS)"/><rect x="186" y="176" width="28" height="30" fill="url(#gD)"/><rect x="140" y="204" width="120" height="12" rx="6" fill="url(#gD)"/>`,
+    lego: () => `<rect x="96" y="116" width="208" height="100" rx="8" fill="url(#gY)"/><rect x="96" y="116" width="208" height="16" fill="#e0a100"/>${[132, 184, 236].map((x) => `<rect x="${x}" y="92" width="34" height="28" rx="6" fill="url(#gY)"/><ellipse cx="${x + 17}" cy="92" rx="17" ry="6" fill="#ffe680"/>`).join("")}<rect x="150" y="60" width="100" height="40" rx="6" fill="url(#gR)" transform="rotate(-8 200 80)"/>`,
     sale: (d) => `<g transform="rotate(-9 200 130)"><path d="M78 66h178l74 64-74 64H78z" fill="url(#gR)"/><circle cx="268" cy="130" r="10" fill="#fff"/>${T(160, 112, 24, "UP TO")}${T(160, 172, 62, d.percentOff ? `${d.percentOff}%` : "SALE")}</g>`,
   };
   function artKind(d) {
@@ -69,7 +73,7 @@
       [/blender|slushi|creami/, "blender"], [/switch|ps5|playstation|xbox|console/, "console"], [/game|steam|\[gog\]|epic/, "gamepad"],
       [/rtx|radeon|gpu|graphics card/, "gpu"], [/doorbell/, "doorbell"], [/cam(era)?\b/, "camera"], [/fire tv|roku|stick/, "stick"], [/drone|dji/, "drone"],
       [/drill|driver|saw|dewalt|milwaukee|ryobi/, "drill"], [/battery/, "battery"], [/grill|griddle|smoker/, "grill"], [/gift card/, "giftcard"],
-      [/airtag|tracker/, "tag"], [/shoe|sneaker|boot/, "shoe"],
+      [/airtag|tracker/, "tag"], [/shoe|sneaker|boot/, "shoe"], [/echo dot|speaker|soundbar/, "speaker"], [/quest|vr headset/, "vr"], [/monitor/, "monitor"], [/lego/, "lego"],
     ];
     for (const [re, k] of rules) if (re.test(t)) return k;
     return "sale";
@@ -136,10 +140,19 @@
   }
 
   // ---------- rendering ----------
+  // Exact product pages say "View at", store searches say "Search", so nobody is surprised.
+  function linkLabel(d, short) {
+    if (!d.store) return "Get deal ↗";
+    if (d.kind === "sale") return "Shop the sale ↗";
+    if (d.exact === false) return short ? `Search<span> ${esc(d.store)}</span> ↗` : `Search ${esc(d.store)} ↗`;
+    return short ? `View<span> at ${esc(d.store)}</span> ↗` : `View at ${esc(d.store)} ↗`;
+  }
+  const linkTitle = (d) => !d.store ? "Open the deal" : d.kind === "sale" ? `Opens ${d.store}'s sale page` : d.exact === false ? `Opens a search for this product on ${d.store}` : `Opens this product's page on ${d.store}`;
   function cardHTML(d, i) {
     const { hue, inner } = picture(d, i < 4);
     const url = esc(safeUrl(d.url));
-    const shopLabel = d.store ? `Shop<span> at ${esc(d.store)}</span> ↗` : "Get deal ↗";
+    const shopLabel = linkLabel(d, true);
+    const linkTip = esc(linkTitle(d));
     const off = d.percentOff ? `<span class="off">${d.upTo ? "<small>UP TO</small>" : ""}-${d.percentOff}%</span>` : "";
     const note = d.note ? `<span class="note">${esc(d.note)}</span>` : "";
     const price = d.price != null ? `<div class="prices"><b class="now">${fmt(d.price)}</b>${d.originalPrice ? `<s>${fmt(d.originalPrice)}</s>` : ""}</div>` : "";
@@ -149,12 +162,12 @@
       : `<small class="via">From ${esc(d.source)}</small>`;
     const on = saved.has(d.id);
     return `<article class="card">
-      <a class="pic" href="${url}" target="_blank" rel="noopener nofollow" style="--h:${hue}" tabindex="-1" aria-hidden="true">${inner}${off}${note}</a>
+      <a class="pic" href="${url}" title="${linkTip}" target="_blank" rel="noopener nofollow" style="--h:${hue}" tabindex="-1" aria-hidden="true">${inner}${off}${note}</a>
       <div class="info">
         <div class="meta" style="--c:${STORE_COLOR[d.store] || "#999"}"><i></i>${esc(d.store || d.source)}${d.brand && d.brand !== d.store ? `<span class="brand">${esc(d.brand)}</span>` : ""}</div>
-        <h3><a href="${url}" target="_blank" rel="noopener nofollow">${esc(d.title)}</a></h3>
+        <h3><a href="${url}" title="${linkTip}" target="_blank" rel="noopener nofollow">${esc(d.title)}</a></h3>
         ${price}${save}
-        <div class="row"><a class="go" href="${url}" target="_blank" rel="noopener nofollow">${shopLabel}</a>
+        <div class="row"><a class="go${d.exact === false ? " search" : ""}" href="${url}" title="${linkTip}" target="_blank" rel="noopener nofollow">${shopLabel}</a>
           <button type="button" class="fav${on ? " on" : ""}" data-fav="${esc(d.id)}" aria-pressed="${on}" aria-label="${on ? "Remove from saved" : "Save deal"}">${on ? "★" : "☆"}</button></div>
         ${via}
       </div>
@@ -242,7 +255,7 @@
         <span class="pic" style="--h:${hue}">${inner}<span class="off">-${d.percentOff}%</span></span>
         <span class="s-body"><span class="label">Top deal · ${esc(d.store)}</span><h2>${esc(d.title)}</h2>
         <span class="prices"><b class="now">${fmt(d.price)}</b>${d.originalPrice ? `<s>${fmt(d.originalPrice)}</s>` : ""}</span>
-        <span class="go">Shop at ${esc(d.store)} ↗</span></span></a>`;
+        <span class="go">${linkLabel(d, false)}</span></span></a>`;
     }).join("")}</div>
     <div class="spot-nav"><button type="button" id="spotPrev" aria-label="Previous top deal">‹</button><button type="button" id="spotNext" aria-label="Next top deal">›</button></div>`;
     const track = $("#spotTrack");
@@ -362,7 +375,7 @@
       deals = (data.deals || []).map((d) => ({ ...d, category: rename[d.category] || d.category }));
       const when = data.generatedAt ? new Date(data.generatedAt).toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) : "";
       $("#dataNote").textContent = data.sample ? "These are sample deals for preview only."
-        : data.snapshot ? `Prices as reported by deal roundups and store pages, collected ${when}. Clicking a deal searches for that product on the store's own site.`
+        : data.snapshot ? `Prices as reported by deal roundups and store pages, collected ${when}. Deals marked “View at” open the exact product page on the store's site; “Search” opens a search for it there.`
         : `Updated ${when} from ${(data.sources || []).filter((s) => s.ok).length} deal sources.`;
       $("#sourcesList").innerHTML = (data.sources || []).map((s) => `<li>${esc(s.name)}: ${s.ok ? `${s.count} deal${s.count === 1 ? "" : "s"}` : "unavailable"}</li>`).join("");
       renderStats();
