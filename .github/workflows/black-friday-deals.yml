@@ -1,0 +1,42 @@
+name: Black Friday deals
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"   # refresh deals every 30 minutes
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["black-friday-deals/**", ".github/workflows/black-friday-deals.yml"]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    defaults:
+      run:
+        working-directory: black-friday-deals
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm test
+      - name: Fetch latest deals
+        run: npm run fetch
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: black-friday-deals/public
+      - id: deploy
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,13 @@
+[
+  { "id": "slickdeals-frontpage", "name": "Slickdeals Frontpage", "url": "https://slickdeals.net/newsearch.php?mode=frontpage&searcharea=deals&searchin=first&rss=1", "weight": 1.2 },
+  { "id": "slickdeals-popular", "name": "Slickdeals Popular", "url": "https://slickdeals.net/newsearch.php?mode=popdeals&searcharea=deals&searchin=first&rss=1", "weight": 1.1 },
+  { "id": "slickdeals-blackfriday", "name": "Slickdeals Black Friday", "url": "https://slickdeals.net/newsearch.php?q=black+friday&searcharea=deals&searchin=first&rss=1", "weight": 1.2 },
+  { "id": "dealnews", "name": "DealNews", "url": "https://www.dealnews.com/?rss=1&sort=time", "weight": 1.0 },
+  { "id": "bensbargains", "name": "Ben's Bargains", "url": "https://bensbargains.com/rss/", "weight": 0.9 },
+  { "id": "reddit-deals", "name": "r/deals", "url": "https://www.reddit.com/r/deals/new/.rss", "weight": 0.9 },
+  { "id": "reddit-buildapcsales", "name": "r/buildapcsales", "url": "https://www.reddit.com/r/buildapcsales/new/.rss", "weight": 1.0 },
+  { "id": "reddit-gamedeals", "name": "r/GameDeals", "url": "https://www.reddit.com/r/GameDeals/new/.rss", "weight": 1.0 },
+  { "id": "reddit-frugalmalefashion", "name": "r/frugalmalefashion", "url": "https://www.reddit.com/r/frugalmalefashion/new/.rss", "weight": 0.8 },
+  { "id": "reddit-appledeals", "name": "r/AppleDeals", "url": "https://www.reddit.com/r/appledeals/new/.rss", "weight": 0.9 },
+  { "id": "reddit-blackfriday", "name": "r/blackfriday", "url": "https://www.reddit.com/r/blackfriday/new/.rss", "weight": 1.0 }
+]

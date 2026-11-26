@@ -1,0 +1,15 @@
+{
+  "name": "black-friday-deal-finder",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Collects Black Friday deals from deal sites and Reddit and ranks them on one page.",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "fetch": "node scripts/fetch-deals.mjs",
+    "sample": "node scripts/fetch-deals.mjs --sample",
+    "serve": "node server.mjs",
+    "start": "node scripts/fetch-deals.mjs; node server.mjs",
+    "test": "node --test test/"
+  }
+}
