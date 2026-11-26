@@ -4,92 +4,131 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Black Friday Deal Finder</title>
-  <meta name="description" content="The best Black Friday and Cyber Monday deals from across the web, gathered in one place and ranked.">
+  <meta name="description" content="The best Black Friday and Cyber Monday deals from Amazon, Best Buy, Walmart, Target and more, in one place, with filters.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="styles.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏷️</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M3 6h15l11 10-11 10H3z' fill='%23e10600'/><circle cx='8' cy='16' r='2.5' fill='white'/></svg>">
 </head>
 <body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="gD" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4b4b56"/><stop offset="1" stop-color="#141418"/></linearGradient>
+      <linearGradient id="gL" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#c7cad1"/></linearGradient>
+      <linearGradient id="gS" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7cc0ff"/><stop offset=".45" stop-color="#4146d8"/><stop offset="1" stop-color="#140f3c"/></linearGradient>
+      <linearGradient id="gR" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff6a5c"/><stop offset="1" stop-color="#c00010"/></linearGradient>
+      <linearGradient id="gY" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe680"/><stop offset="1" stop-color="#f2b200"/></linearGradient>
+      <linearGradient id="gB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fd4ff"/><stop offset="1" stop-color="#2f7de0"/></linearGradient>
+      <linearGradient id="gW" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+      <radialGradient id="gSh"><stop offset="0" stop-color="#000" stop-opacity=".35"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+    </defs>
+  </svg>
+
   <header class="hero">
-    <div class="wrap">
-      <div class="brand">
-        <span class="logo">🏷️</span>
-        <div>
-          <h1>Black Friday Deal Finder</h1>
-          <p class="tag">Deals from all over the web in one place, ranked by discount, how new they are and how many sites post them.</p>
-        </div>
+    <div class="bar">
+      <a class="mark" href="#top" id="top" aria-label="Black Friday Deal Finder home">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 6h15l11 10-11 10H3z" fill="#fff"/><circle cx="8" cy="16" r="2.5" fill="#e10600"/></svg>
+        <span>Deal Finder</span>
+      </a>
+      <div class="clock" id="countdown" aria-live="off"></div>
+    </div>
+
+    <div class="hero-grid">
+      <div class="pitch">
+        <h1>Every good Black Friday deal, in one place.</h1>
+        <p class="sub">Deals from Amazon, Best Buy, Walmart, Target, Home Depot and more, ranked by how good they are. Click any deal to go to the store.</p>
+        <form class="search" id="searchForm" role="search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M16.5 16.5L21 21" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+          <input id="q" type="search" placeholder="Search: AirPods, OLED TV, air fryer…" autocomplete="off" aria-label="Search deals">
+          <button type="submit">Search</button>
+        </form>
+        <dl class="stats" id="stats"></dl>
       </div>
-      <div class="countdown" id="countdown" aria-live="polite"></div>
+      <section class="spot" id="spot" aria-label="Top deals" aria-roledescription="carousel"></section>
     </div>
   </header>
 
-  <div class="notice" id="sampleNotice" hidden>
-    These are <strong>sample deals</strong> for preview only. Run <code>npm run fetch</code> or use the GitHub Action to load real deals.
+  <nav class="stores" aria-label="Stores"><div class="stores-in" id="storeTabs"></div></nav>
+
+  <div class="quick" id="quick" aria-label="Quick picks"></div>
+
+  <div class="layout">
+    <aside class="filters" id="filters" aria-label="Filters">
+      <div class="f-head">
+        <h2>Filters</h2>
+        <button type="button" class="txt" id="clearAll">Clear all</button>
+        <button type="button" class="close" id="closeFilters" aria-label="Close filters">✕</button>
+      </div>
+
+      <section class="f-sec">
+        <h3>Price</h3>
+        <div class="seg wrap" id="pricePresets"></div>
+        <div class="minmax">
+          <label><span>Min $</span><input id="pmin" type="number" inputmode="numeric" min="0" placeholder="0"></label>
+          <label><span>Max $</span><input id="pmax" type="number" inputmode="numeric" min="0" placeholder="Any"></label>
+        </div>
+      </section>
+
+      <section class="f-sec">
+        <h3>Discount</h3>
+        <div class="seg" id="pctSeg"></div>
+      </section>
+
+      <section class="f-sec">
+        <h3>Category</h3>
+        <div class="checks" id="catList"></div>
+      </section>
+
+      <section class="f-sec">
+        <h3>Brand</h3>
+        <input id="brandQ" class="mini" type="search" placeholder="Find a brand" aria-label="Find a brand">
+        <div class="checks" id="brandList"></div>
+      </section>
+
+      <section class="f-sec">
+        <h3>Deal type</h3>
+        <div class="seg" id="typeSeg"></div>
+        <label class="switch"><input type="checkbox" id="savedOnly"><span></span> Saved deals only</label>
+      </section>
+
+      <button type="button" class="apply" id="applyFilters">Show deals</button>
+    </aside>
+    <div class="scrim" id="scrim" hidden></div>
+
+    <main class="results" id="results">
+      <div class="tools">
+        <button type="button" class="filter-btn" id="openFilters">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M6 12h12M10 18h4" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+          Filters <b id="filterCount"></b>
+        </button>
+        <p class="count" id="count" aria-live="polite"></p>
+        <label class="sort"><span>Sort</span>
+          <select id="sort">
+            <option value="score">Best deals</option>
+            <option value="percent">Biggest % off</option>
+            <option value="savings">Biggest $ savings</option>
+            <option value="priceAsc">Price: low to high</option>
+            <option value="priceDesc">Price: high to low</option>
+            <option value="newest">Newest</option>
+          </select>
+        </label>
+      </div>
+      <div class="pills" id="pills"></div>
+      <div class="grid" id="grid"></div>
+      <div class="more"><button type="button" id="loadMore" hidden>Show more deals</button></div>
+      <div class="empty" id="empty" hidden>
+        <p><b>No deals match these filters.</b></p>
+        <button type="button" id="emptyClear">Clear filters</button>
+      </div>
+    </main>
   </div>
 
-  <main class="wrap">
-    <section class="controls" aria-label="Filters">
-      <input id="q" type="search" placeholder="Search deals: “airpods”, “rtx”, “lego”…" autocomplete="off" aria-label="Search deals">
-      <select id="category" aria-label="Category"><option value="">All categories</option></select>
-      <select id="store" aria-label="Store"><option value="">All stores</option></select>
-      <select id="sort" aria-label="Sort by">
-        <option value="score">Best deals</option>
-        <option value="newest">Newest</option>
-        <option value="percent">Biggest % off</option>
-        <option value="savings">Biggest $ savings</option>
-        <option value="priceAsc">Price: low to high</option>
-      </select>
-      <label class="range">Min % off <input id="minPct" type="range" min="0" max="90" step="5" value="0"><output id="minPctOut">0%</output></label>
-      <label class="range">Max price <input id="maxPrice" type="number" min="0" step="10" placeholder="any" inputmode="numeric"></label>
-      <div class="toggles">
-        <label><input type="checkbox" id="bfOnly"> Black Friday / Cyber Monday only</label>
-        <label><input type="checkbox" id="pricedOnly"> Has a price</label>
-        <label><input type="checkbox" id="savedOnly"> ★ Saved</label>
-      </div>
-    </section>
-
-    <div class="chips" id="categoryChips" aria-label="Quick categories"></div>
-
-    <div class="meta">
-      <span id="count"></span>
-      <span id="updated"></span>
-      <button id="sourcesBtn" class="link" type="button">Sources</button>
-    </div>
-    <dialog id="sourcesDialog">
-      <h2>Sources</h2>
-      <ul id="sourcesList"></ul>
-      <form method="dialog"><button>Close</button></form>
-    </dialog>
-
-    <section id="grid" class="grid" aria-live="polite"></section>
-    <div class="more"><button id="loadMore" type="button" hidden>Show more deals</button></div>
-    <p class="empty" id="empty" hidden>No deals match these filters. Try clearing some.</p>
-  </main>
-
-  <footer class="wrap foot">
-    Prices and stock change fast, so check the store's price before you buy. This site links to the original deal posts and is not affiliated with any store.
+  <footer class="foot">
+    <p id="dataNote"></p>
+    <p>Prices change fast and some deals sell out, so check the price on the store's site before you buy. This site isn't affiliated with any store.</p>
+    <details><summary>Where these deals come from</summary><ul id="sourcesList"></ul></details>
   </footer>
-
-  <template id="cardTpl">
-    <article class="card">
-      <a class="thumb" target="_blank" rel="noopener nofollow"><img alt="" loading="lazy" referrerpolicy="no-referrer"><span class="ph"></span></a>
-      <div class="body">
-        <div class="top">
-          <span class="store"></span>
-          <span class="pct"></span>
-          <span class="bf" title="Black Friday / Cyber Monday deal">BF</span>
-        </div>
-        <h3><a class="title" target="_blank" rel="noopener nofollow"></a></h3>
-        <div class="price"><strong class="now"></strong> <s class="was"></s> <span class="save"></span></div>
-        <div class="foot-row">
-          <span class="src"></span>
-          <span class="actions">
-            <a class="disc" target="_blank" rel="noopener nofollow">Discussion</a>
-            <button class="save-btn" type="button" aria-label="Save deal">☆</button>
-          </span>
-        </div>
-      </div>
-    </article>
-  </template>
 
   <script src="app.js"></script>
 </body>
