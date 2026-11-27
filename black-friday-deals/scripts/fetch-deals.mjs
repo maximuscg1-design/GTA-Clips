@@ -246,8 +246,20 @@ async function main() {
   }
 
   const cutoff = Date.now() - MAX_AGE_DAYS * 864e5;
-  const deals = mergeDeals(all.filter((d) => new Date(d.postedAt).getTime() >= cutoff))
-    .sort((a, b) => b.score - a.score);
+  let deals = mergeDeals(all.filter((d) => new Date(d.postedAt).getTime() >= cutoff));
+
+  // PC game deals from CheapShark (Steam, GOG, Epic, Fanatical, Green Man Gaming...).
+  if (!sample && !process.argv.includes("--no-games")) {
+    try {
+      const { fetchCheapShark } = await import("./cheapshark.mjs");
+      const cs = await fetchCheapShark();
+      deals.push(...cs.deals);
+      statuses.push({ id: "cheapshark", name: `CheapShark (${cs.stores.join(", ")})`, ok: true, count: cs.deals.length });
+    } catch (err) {
+      statuses.push({ id: "cheapshark", name: "CheapShark", ok: false, error: String(err.message || err) });
+    }
+  }
+  deals.sort((a, b) => b.score - a.score);
 
   const okCount = statuses.filter((s) => s.ok).length;
   if (!sample && deals.length === 0) {

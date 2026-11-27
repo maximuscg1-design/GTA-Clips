@@ -168,6 +168,12 @@ SALES.forEach(([store, title, pct, category, src, url, upTo], i) => {
   d.score = score(d, Date.parse(postedAt));
   deals.push(d);
 });
+// Hundreds of live PC game deals across a dozen stores.
+if (!process.argv.includes("--no-games")) {
+  const { fetchCheapShark } = await import("./cheapshark.mjs");
+  const cs = await fetchCheapShark({ total: 560 });
+  deals.push(...cs.deals);
+}
 deals.sort((a, b) => b.score - a.score);
 
 const sources = [...new Set(deals.map((d) => d.source))].map((name) => ({ id: name, name, ok: true, count: deals.filter((d) => d.source === name).length }));

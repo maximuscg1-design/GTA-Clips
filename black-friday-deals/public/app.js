@@ -17,11 +17,14 @@
   const STORE_COLOR = {
     "Amazon": "#ff9900", "Best Buy": "#0046be", "Walmart": "#0071dc", "Target": "#cc0000", "Home Depot": "#f96302",
     "Newegg": "#e8a200", "Wayfair": "#7f187f", "Lululemon": "#d22030", "PlayStation Store": "#0070d1", "Costco": "#005daa", "Nike": "#111111", "Kohl's": "#860c32",
+    "Steam": "#1b2838", "GOG": "#86328a", "Epic Games": "#313131", "Fanatical": "#ff9800", "Green Man Gaming": "#00c66b",
+    "GamersGate": "#e4572e", "Ubisoft Store": "#0070ff", "WinGameStore": "#3a7bd5", "GameBillet": "#f25c05", "Gamesplanet": "#d81b60",
+    "IndieGala": "#e53935", "DreamGame": "#7e57c2", "Humble": "#cc2929",
   };
   const CAT_HUE = {
     "TVs & Streaming": 220, "Headphones & Audio": 265, "Laptops & Tablets": 200, "Phones & Wearables": 190, "Smart Home": 160,
     "Home & Kitchen": 28, "Gaming": 345, "PC Parts": 140, "Cameras & Drones": 210, "Tools & Outdoor": 38, "Clothing & Shoes": 330,
-    "Beauty & Health": 320, "Gift Cards": 48, "Toys": 52, "Store-wide sales": 0, "Other": 0,
+    "Beauty & Health": 320, "Gift Cards": 48, "Toys": 52, "PC Games": 255, "Store-wide sales": 0, "Other": 0,
   };
 
   // ---------- illustrations (drawn, so they work anywhere) ----------
@@ -80,6 +83,11 @@
   }
   function picture(d, eager) {
     const hue = CAT_HUE[d.category] ?? 0;
+    if (d.sprite) {
+      const { f, c, r, cols, rows } = d.sprite;
+      const pos = `background-image:url(${esc(f)});background-size:${cols * 100}% ${rows * 100}%;background-position:${cols > 1 ? (c / (cols - 1)) * 100 : 0}% ${rows > 1 ? (r / (rows - 1)) * 100 : 0}%`;
+      return { hue: CAT_HUE[d.category] ?? 0, cover: true, inner: `<span class="cv bg" style="${pos}"></span><span class="cv fg" style="${pos}"></span>` };
+    }
     const inner = d.image
       ? `<img src="${esc(d.image)}" alt="" ${eager ? "" : 'loading="lazy"'} referrerpolicy="no-referrer">`
       : `<svg viewBox="0 0 400 260" aria-hidden="true"><ellipse cx="200" cy="230" rx="150" ry="14" fill="url(#gSh)"/>${ART[artKind(d)](d)}</svg>`;
@@ -91,17 +99,22 @@
   const S = { q: "", stores: new Set(), cats: new Set(), brands: new Set(), pmin: null, pmax: null, preset: "any", pct: 0, type: "all", saved: false, sort: "score", quick: null };
   let shown = PAGE;
 
-  const PRICE_PRESETS = [["any", "Any", null, null], ["u25", "Under $25", null, 25], ["u50", "Under $50", null, 50], ["u100", "$50–$100", 50, 100], ["u250", "$100–$250", 100, 250], ["u500", "$250–$500", 250, 500], ["o500", "$500+", 500, null]];
-  const PCTS = [[0, "Any"], [20, "20%+"], [30, "30%+"], [40, "40%+"], [50, "50%+"]];
+  const PRICE_PRESETS = [["any", "Any", null, null], ["free", "Free", null, 0], ["u5", "Under $5", null, 5], ["u10", "Under $10", null, 10], ["u25", "Under $25", null, 25], ["u50", "Under $50", null, 50], ["u100", "$50–$100", 50, 100], ["u250", "$100–$250", 100, 250], ["u500", "$250–$500", 250, 500], ["o500", "$500+", 500, null]];
+  const PCTS = [[0, "Any"], [20, "20%+"], [30, "30%+"], [50, "50%+"], [70, "70%+"], [90, "90%+"]];
   const TYPES = [["all", "All"], ["product", "Products"], ["sale", "Store-wide sales"]];
   const QUICK = [
+    ["PC games", (s) => { s.cats = new Set(["PC Games"]); }],
+    ["Free games", (s) => { s.cats = new Set(["PC Games"]); s.pmax = 0; s.preset = "free"; }],
+    ["Games under $5", (s) => { s.cats = new Set(["PC Games"]); s.pmax = 5; s.preset = "u5"; }],
+    ["Top-rated games", (s) => { s.cats = new Set(["PC Games"]); s.sort = "rated"; }],
+    ["Consoles & gear", (s) => { s.cats = new Set(["Gaming"]); }],
+    ["Gaming laptops", (s) => { s.q = "rtx"; }],
     ["Under $50", (s) => { s.pmax = 50; s.preset = "u50"; }],
     ["50%+ off", (s) => { s.pct = 50; }],
     ["Apple", (s) => { s.brands = new Set(["Apple"]); }],
     ["TVs", (s) => { s.cats = new Set(["TVs & Streaming"]); }],
     ["Headphones", (s) => { s.cats = new Set(["Headphones & Audio"]); }],
     ["Kitchen", (s) => { s.cats = new Set(["Home & Kitchen"]); }],
-    ["Gaming", (s) => { s.cats = new Set(["Gaming"]); }],
     ["Tools", (s) => { s.cats = new Set(["Tools & Outdoor"]); }],
     ["Gifts under $100", (s) => { s.pmax = 100; s.preset = null; s.type = "product"; }],
   ];
@@ -123,6 +136,8 @@
     if (S.saved && !saved.has(d.id)) return false;
     return true;
   }
+  // Steam review % weighted by how many people reviewed, or Metacritic; -1 if unrated.
+  const ratingKey = (d) => d.rating ? d.rating.percent - 20 / Math.log10(10 + (d.rating.count || 0)) : d.metacritic ? d.metacritic - 5 : -1;
   const pctKey = (d) => (d.upTo ? -1 : d.percentOff ?? -1);
   const SORTS = {
     score: (a, b) => b.score - a.score,
@@ -130,6 +145,7 @@
     savings: (a, b) => savings(b) - savings(a) || b.score - a.score,
     priceAsc: (a, b) => (a.price ?? Infinity) - (b.price ?? Infinity),
     priceDesc: (a, b) => (b.price ?? -1) - (a.price ?? -1),
+    rated: (a, b) => ratingKey(b) - ratingKey(a) || b.score - a.score,
     newest: (a, b) => new Date(b.postedAt) - new Date(a.postedAt) || b.score - a.score,
   };
   const results = () => deals.filter((d) => matches(d)).sort(SORTS[S.sort] || SORTS.score);
@@ -140,6 +156,16 @@
   }
 
   // ---------- rendering ----------
+  function rateLine(d) {
+    const bits = [];
+    if (d.rating) bits.push(`<span class="${d.rating.percent >= 80 ? "good" : ""}">${esc(d.rating.text)} · ${d.rating.percent}%</span>`);
+    if (d.metacritic) bits.push(`<span>Metacritic ${d.metacritic}</span>`);
+    return bits.length ? `<div class="rate">${bits.join("")}</div>` : "";
+  }
+  function alsoLine(d) {
+    if (!d.alsoAt?.length) return "";
+    return `<div class="also">Also at ${d.alsoAt.slice(0, 2).map((a) => `<a href="${esc(safeUrl(a.url))}" target="_blank" rel="noopener nofollow">${esc(a.store)} ${fmt(a.price)}</a>`).join(", ")}</div>`;
+  }
   // Exact product pages say "View at", store searches say "Search", so nobody is surprised.
   function linkLabel(d, short) {
     if (!d.store) return "Get deal ↗";
@@ -149,7 +175,7 @@
   }
   const linkTitle = (d) => !d.store ? "Open the deal" : d.kind === "sale" ? `Opens ${d.store}'s sale page` : d.exact === false ? `Opens a search for this product on ${d.store}` : `Opens this product's page on ${d.store}`;
   function cardHTML(d, i) {
-    const { hue, inner } = picture(d, i < 4);
+    const { hue, inner, cover } = picture(d, i < 4);
     const url = esc(safeUrl(d.url));
     const shopLabel = linkLabel(d, true);
     const linkTip = esc(linkTitle(d));
@@ -162,11 +188,11 @@
       : `<small class="via">From ${esc(d.source)}</small>`;
     const on = saved.has(d.id);
     return `<article class="card">
-      <a class="pic" href="${url}" title="${linkTip}" target="_blank" rel="noopener nofollow" style="--h:${hue}" tabindex="-1" aria-hidden="true">${inner}${off}${note}</a>
+      <a class="pic${cover ? " cover" : ""}" href="${url}" title="${linkTip}" target="_blank" rel="noopener nofollow" style="--h:${hue}" tabindex="-1" aria-hidden="true">${inner}${off}${note}</a>
       <div class="info">
         <div class="meta" style="--c:${STORE_COLOR[d.store] || "#999"}"><i></i>${esc(d.store || d.source)}${d.brand && d.brand !== d.store ? `<span class="brand">${esc(d.brand)}</span>` : ""}</div>
         <h3><a href="${url}" title="${linkTip}" target="_blank" rel="noopener nofollow">${esc(d.title)}</a></h3>
-        ${price}${save}
+        ${price}${save}${rateLine(d)}${alsoLine(d)}
         <div class="row"><a class="go${d.exact === false ? " search" : ""}" href="${url}" title="${linkTip}" target="_blank" rel="noopener nofollow">${shopLabel}</a>
           <button type="button" class="fav${on ? " on" : ""}" data-fav="${esc(d.id)}" aria-pressed="${on}" aria-label="${on ? "Remove from saved" : "Save deal"}">${on ? "★" : "☆"}</button></div>
         ${via}
@@ -208,7 +234,7 @@
     for (const c of S.cats) p.push([c, () => S.cats.delete(c)]);
     for (const b of S.brands) p.push([b, () => S.brands.delete(b)]);
     if (S.pmin != null || S.pmax != null) {
-      const label = S.pmin != null && S.pmax != null ? `${fmt(S.pmin)}–${fmt(S.pmax)}` : S.pmax != null ? `Under ${fmt(S.pmax)}` : `${fmt(S.pmin)}+`;
+      const label = S.pmax === 0 ? "Free" : S.pmin != null && S.pmax != null ? `${fmt(S.pmin)}–${fmt(S.pmax)}` : S.pmax != null ? `Under ${fmt(S.pmax)}` : `${fmt(S.pmin)}+`;
       p.push([label, () => { S.pmin = S.pmax = null; S.preset = "any"; }]);
     }
     if (S.pct) p.push([`${S.pct}%+ off`, () => { S.pct = 0; }]);
@@ -229,6 +255,7 @@
     const pills = activePills();
     pillActions = pills.map((x) => x[1]);
     $("#pills").innerHTML = pills.map(([label], i) => `<button type="button" class="pill" data-pill="${i}" aria-label="Remove filter ${esc(label)}">${esc(label)}</button>`).join("");
+    $("#sort").value = S.sort;
     $("#filterCount").textContent = pills.length ? pills.length : "";
     for (const b of document.querySelectorAll(".qp")) b.classList.toggle("on", b.dataset.q === S.quick);
     renderStores();
@@ -246,13 +273,13 @@
 
   // spotlight carousel
   function renderSpot() {
-    const rank = (d) => d.percentOff + savings(d) * 0.02;
+    const rank = (d) => d.percentOff + savings(d) * 0.05 + (d.rating ? (d.rating.percent - 85) : 0) + (d.metacritic ? d.metacritic - 80 : 0);
     const top = deals.filter((d) => d.price != null && d.percentOff && !d.upTo).sort((a, b) => rank(b) - rank(a)).slice(0, 6);
     if (!top.length) { $("#spot").hidden = true; return; }
     $("#spot").innerHTML = `<div class="spot-track" id="spotTrack" tabindex="0" aria-label="Top deals. Use the arrow keys to browse.">${top.map((d, i) => {
-      const { hue, inner } = picture(d, true);
+      const { hue, inner, cover } = picture(d, true);
       return `<a class="slide" href="${esc(safeUrl(d.url))}" target="_blank" rel="noopener nofollow" aria-label="Top deal ${i + 1} of ${top.length}: ${esc(d.title)}, ${fmt(d.price)} at ${esc(d.store)}">
-        <span class="pic" style="--h:${hue}">${inner}<span class="off">-${d.percentOff}%</span></span>
+        <span class="pic${cover ? " cover" : ""}" style="--h:${hue}">${inner}<span class="off">-${d.percentOff}%</span></span>
         <span class="s-body"><span class="label">Top deal · ${esc(d.store)}</span><h2>${esc(d.title)}</h2>
         <span class="prices"><b class="now">${fmt(d.price)}</b>${d.originalPrice ? `<s>${fmt(d.originalPrice)}</s>` : ""}</span>
         <span class="go">${linkLabel(d, false)}</span></span></a>`;
@@ -320,7 +347,7 @@
   $("#pmax").addEventListener("change", () => { S.pmax = num($("#pmax").value); S.preset = null; S.quick = null; render(); });
 
   function clearState() {
-    Object.assign(S, { q: "", stores: new Set(), cats: new Set(), brands: new Set(), pmin: null, pmax: null, preset: "any", pct: 0, type: "all", saved: false, quick: null });
+    Object.assign(S, { sort: "score", q: "", stores: new Set(), cats: new Set(), brands: new Set(), pmin: null, pmax: null, preset: "any", pct: 0, type: "all", saved: false, quick: null });
     $("#q").value = ""; $("#brandQ").value = "";
   }
 
@@ -340,7 +367,7 @@
     if (t.classList.contains("qp")) {
       const same = S.quick === ds.q;
       clearState();
-      if (!same) { QUICK.find((x) => x[0] === ds.q)[1](S); S.quick = ds.q; }
+      if (!same) { QUICK.find((x) => x[0] === ds.q)[1](S); S.quick = ds.q; $("#q").value = S.q; }
       render();
       return;
     }

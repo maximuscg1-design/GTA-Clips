@@ -2,7 +2,7 @@ name: Black Friday deals
 
 on:
   schedule:
-    - cron: "*/30 * * * *"   # refresh deals every 30 minutes
+    - cron: "17 * * * *"   # refresh deals every hour
   workflow_dispatch:
   push:
     branches: [main]
