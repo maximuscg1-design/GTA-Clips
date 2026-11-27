@@ -149,8 +149,8 @@
   const ratingKey = (d) => d.rating ? d.rating.percent - 20 / Math.log10(10 + (d.rating.count || 0)) : d.metacritic ? d.metacritic - 5 : -1;
   const pctKey = (d) => (d.upTo ? -1 : d.percentOff ?? -1);
   const SORTS = {
-    // Deals with a real product photo rank a little higher by default.
-    score: (a, b) => (b.score + (b.sprite ? 20 : 0)) - (a.score + (a.sprite ? 20 : 0)),
+    // Deals with a real product photo come first by default.
+    score: (a, b) => (b.sprite ? 1 : 0) - (a.sprite ? 1 : 0) || b.score - a.score,
     percent: (a, b) => pctKey(b) - pctKey(a) || b.score - a.score,
     savings: (a, b) => savings(b) - savings(a) || b.score - a.score,
     priceAsc: (a, b) => (a.price ?? Infinity) - (b.price ?? Infinity),
