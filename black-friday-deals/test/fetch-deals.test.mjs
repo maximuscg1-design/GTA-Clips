@@ -64,3 +64,11 @@ test("keeps previous deals that are still fresh", async () => {
   ];
   assert.deepEqual(mergeWithPrevious(fresh, prev, now).map((d) => d.id), ["a", "b"]);
 });
+
+test("store comes from visible text, not HTML attributes", () => {
+  const d = buildDeal({ title: "Anker 67W USB-C Charger $19.99", link: "https://slickdeals.net/f/1", date: "", html: '<a href="x" target="_blank">Anker 67W</a> at Amazon', image: "" }, { id: "s", name: "s" });
+  assert.equal(d.store, "Amazon");
+  assert.equal(d.category, "Chargers & Accessories");
+  const e = buildDeal({ title: "[Prime] Some Gadget $9", link: "https://slickdeals.net/f/2", date: "", html: '<a target="_blank">x</a>', image: "" }, { id: "s", name: "s" });
+  assert.equal(e.store, "");
+});

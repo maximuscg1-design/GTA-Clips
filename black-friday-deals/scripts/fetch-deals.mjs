@@ -81,6 +81,8 @@ const STORES = [
   ["Dick's", /\bdick'?s sporting\b/i], ["Kohl's", /\bkohls\.com\b/i], ["AliExpress", /aliexpress/i],
 ];
 
+export const TECH = new Set(["Gaming", "PS5 Games", "Switch & Xbox Games", "Storage", "TVs & Streaming", "Laptops & Tablets", "Phones & Wearables", "Headphones & Audio", "PC Parts", "Smart Home", "Chargers & Accessories", "Cameras & Drones", "Games", "TV & Audio"]);
+
 // Order matters: first match wins. Names match the categories the site uses.
 const CATEGORIES = [
   ["Gaming", /\b(dualsense|dualshock|controller|ps5 (slim|pro|console|digital)|playstation (5 )?(console|portal|vr2?)|ps ?portal|ps ?vr2|pulse (elite|explore)|gaming headset|headset|switch 2 (console|bundle)|xbox series|steam deck|joy-?con|meta quest)\b/i],
@@ -93,6 +95,7 @@ const CATEGORIES = [
   ["Headphones & Audio", /\b(airpods|earbuds|headphones?|soundbar|speaker|sonos|bose|beats|jbl)\b/i],
   ["PC Parts", /\b(gpu|rtx|radeon|rx ?\d{4}|cpu|ryzen|intel core|ram|ddr[45]|motherboard|psu|monitor|keyboard|mouse)\b/i],
   ["Smart Home", /\b(echo|alexa|nest|ring|smart plug|smart home|robot vacuum|roomba|camera|doorbell|blink)\b/i],
+  ["Chargers & Accessories", /\b(charger|charging|power bank|usb-?c|lightning cable|cable|hub|adapter|magsafe|wireless charg\w*|power station)\b/i],
   ["Cameras & Drones", /\b(gopro|dji|drone|mirrorless|dslr)\b/i],
   ["Home & Kitchen", /\b(vacuum|air fryer|instant pot|blender|mattress|cookware|kitchen|coffee|dyson|ninja|kitchenaid)\b/i],
   ["Tools & Outdoor", /\b(drill|dewalt|milwaukee|ryobi|tool|grill|generator)\b/i],
@@ -133,11 +136,12 @@ function hostname(url) {
 
 function detectStore(title, link, html) {
   const at = title.match(/(?:\bat|@|from)\s+([A-Z][\w'&.]*(?:\s[A-Z][\w'&.]*){0,2})\s*(?:\(|$|\[|,|-|\|)/);
-  for (const hay of [at?.[1] || "", title, link, html.slice(0, 600)]) {
+  // Check the visible text only: raw HTML has words like target="_blank".
+  for (const hay of [at?.[1] || "", title, link, stripTags(html).slice(0, 600)]) {
     for (const [name, re] of STORES) if (re.test(hay)) return name;
   }
   const bracket = title.match(/^\[([^\]]{2,30})\]/); // e.g. "[Steam] Game X" or "[GPU] ..."
-  if (bracket && !/^(gpu|cpu|ssd|ram|monitor|psu|case|hdd|mobo|motherboard|keyboard|mouse|other|laptop|prebuilt)$/i.test(bracket[1])) return bracket[1];
+  if (bracket && !/^(gpu|cpu|ssd|ram|monitor|psu|case|hdd|mobo|motherboard|keyboard|mouse|other|laptop|prebuilt|prime|lightning deal|expired|ymmv|targeted|in-store|in store|.*\bdeal\b.*)$/i.test(bracket[1])) return bracket[1];
   return "";
 }
 
@@ -188,7 +192,8 @@ export function buildDeal(item, source) {
     discussionUrl: link !== item.link ? item.link : null,
     // Reddit posts carry the store link (a product page); other feeds link to the deal post.
     linkKind: link !== item.link ? "product" : "article",
-    store: detectStore(title, link, item.html) || hostname(link).split(".").slice(-2, -1)[0]?.replace(/^\w/, (c) => c.toUpperCase()) || "",
+    // Unknown store stays empty rather than naming the deal site itself.
+    store: detectStore(title, link, item.html) || (/slickdeals|dealnews|reddit|bensbargains/.test(hostname(link)) ? "" : hostname(link).split(".").slice(-2, -1)[0]?.replace(/^\w/, (c) => c.toUpperCase()) || ""),
     category: detectCategory(title),
     price,
     originalPrice: original,
@@ -292,6 +297,7 @@ async function main() {
     }
   }
   if (!sample) deals = mergeWithPrevious(deals, await previousDeals());
+  if (process.argv.includes("--tech-only")) deals = deals.filter((d) => TECH.has(d.category) || (d.kind === "sale" && /tech|electronic|gaming|playstation|best buy|apple/i.test(d.title)));
   deals.sort((a, b) => b.score - a.score);
 
   const okCount = statuses.filter((s) => s.ok).length;

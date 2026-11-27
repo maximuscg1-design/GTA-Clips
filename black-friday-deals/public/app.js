@@ -25,7 +25,7 @@
   const CAT_HUE = {
     "TVs & Streaming": 220, "Headphones & Audio": 265, "Laptops & Tablets": 200, "Phones & Wearables": 190, "Smart Home": 160,
     "Home & Kitchen": 28, "Gaming": 345, "PC Parts": 140, "Cameras & Drones": 210, "Tools & Outdoor": 38, "Clothing & Shoes": 330,
-    "Beauty & Health": 320, "Gift Cards": 48, "Toys": 52, "PC Games": 255, "PS5 Games": 222, "Switch & Xbox Games": 355, "Storage": 150, "Store-wide sales": 0, "Other": 0,
+    "Beauty & Health": 320, "Gift Cards": 48, "Toys": 52, "PC Games": 255, "PS5 Games": 222, "Chargers & Accessories": 45, "Switch & Xbox Games": 355, "Storage": 150, "Store-wide sales": 0, "Other": 0,
   };
 
   // ---------- illustrations (drawn, so they work anywhere) ----------
