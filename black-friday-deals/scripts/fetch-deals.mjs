@@ -268,7 +268,12 @@ async function main() {
   if (sample) {
     ({ deals: all, statuses } = sampleData());
   } else {
-    const results = await Promise.all(sources.map(fetchSource));
+    // A few at a time, so we don't hammer any one site.
+    const results = [];
+    for (let i = 0; i < sources.length; i += 5) {
+      results.push(...(await Promise.all(sources.slice(i, i + 5).map(fetchSource))));
+      await new Promise((r) => setTimeout(r, 400));
+    }
     for (const r of results) { all.push(...r.deals); statuses.push(r.status); }
   }
 

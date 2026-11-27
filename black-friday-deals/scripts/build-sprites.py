@@ -1,53 +1,99 @@
-"""Pack downloaded game cover thumbnails into a few sprite sheets.
+"""Bundle deal photos into a few JPEG sprite sheets.
 
-Hosts like the Claude artifact viewer can't load remote images, so for the
-snapshot build we bundle covers as local JPEG sprite sheets and point each deal
-at its tile. Usage:
-  python3 -I scripts/build-sprites.py <thumbs_dir>
-<thumbs_dir> holds files named md5(image_url).jpg.
+Some hosts (like the Claude artifact viewer) can't load remote images, so we
+download each deal's photo once, fit it into a square tile on white, and pack
+the tiles into sheets. Each deal then points at its tile via a `sprite` field.
+
+Usage:
+  python3 -I scripts/build-sprites.py --download        # fetch photos from deal image URLs
+  python3 -I scripts/build-sprites.py <thumbs_dir>      # use already-downloaded md5(url).jpg files
 """
-import hashlib, json, sys
+import hashlib, io, json, sys, urllib.request
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parent.parent
 DEALS = ROOT / "public" / "deals.json"
 OUT = ROOT / "public" / "sprites"
-TW, TH, COLS, ROWS = 232, 87, 10, 10  # tile size and grid per sheet
+T, COLS, ROWS = 180, 10, 10          # square tile size and grid per sheet
+UA = "Mozilla/5.0 (compatible; BlackFridayDealFinder/1.0)"
+MAX_BYTES = 4_000_000
 
-thumbs = Path(sys.argv[1])
-data = json.loads(DEALS.read_text())
-OUT.mkdir(exist_ok=True)
-for old in OUT.glob("*.jpg"):
-    old.unlink()
 
-tiles = []
-for d in data["deals"]:
-    url = d.get("image") or ""
-    f = thumbs / (hashlib.md5(url.encode()).hexdigest() + ".jpg")
-    if url and f.exists():
+def fetch(url):
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "image/*"})
+        with urllib.request.urlopen(req, timeout=20) as r:
+            data = r.read(MAX_BYTES + 1)
+        return data if len(data) <= MAX_BYTES else None
+    except Exception:
+        return None
+
+
+def tile(data):
+    """Fit any photo into a T x T white square, keeping its proportions."""
+    img = Image.open(io.BytesIO(data))
+    img.load()
+    if img.mode in ("RGBA", "LA", "P"):
+        img = img.convert("RGBA")
+        bg = Image.new("RGBA", img.size, (255, 255, 255, 255))
+        img = Image.alpha_composite(bg, img)
+    img = img.convert("RGB")
+    img.thumbnail((T - 12, T - 12), Image.LANCZOS)
+    sq = Image.new("RGB", (T, T), (255, 255, 255))
+    sq.paste(img, ((T - img.width) // 2, (T - img.height) // 2))
+    return sq
+
+
+def main():
+    data = json.loads(DEALS.read_text())
+    deals = data["deals"]
+    urls = sorted({d["image"] for d in deals if d.get("image")})
+    if sys.argv[1:] == ["--download"]:
+        with ThreadPoolExecutor(12) as ex:
+            blobs = dict(zip(urls, ex.map(fetch, urls)))
+    else:
+        thumbs = Path(sys.argv[1])
+        blobs = {}
+        for u in urls:
+            f = thumbs / (hashlib.md5(u.encode()).hexdigest() + ".jpg")
+            blobs[u] = f.read_bytes() if f.exists() else None
+
+    tiles = {}
+    for u, b in blobs.items():
+        if not b:
+            continue
         try:
-            img = Image.open(f).convert("RGB")
-            img = img.resize((TW, TH), Image.LANCZOS)
-            tiles.append((d, img))
-        except Exception as e:  # skip unreadable files
-            print("skip", d["title"], e)
-    d.pop("sprite", None)
+            tiles[u] = tile(b)
+        except Exception:
+            pass  # not a usable image
 
-per = COLS * ROWS
-for s in range(0, len(tiles), per):
-    chunk = tiles[s:s + per]
-    rows = (len(chunk) + COLS - 1) // COLS
-    sheet = Image.new("RGB", (TW * COLS, TH * rows), (20, 20, 24))
-    name = f"g{s // per}.jpg"
-    for i, (d, img) in enumerate(chunk):
-        c, r = i % COLS, i // COLS
-        sheet.paste(img, (c * TW, r * TH))
-        d["sprite"] = {"f": f"sprites/{name}", "c": c, "r": r, "cols": COLS, "rows": rows}
-    sheet.save(OUT / name, "JPEG", quality=80, optimize=True, progressive=True)
+    OUT.mkdir(exist_ok=True)
+    for old in OUT.glob("*.jpg"):
+        old.unlink()
+    order = list(tiles)
+    where = {}
+    per = COLS * ROWS
+    for s in range(0, len(order), per):
+        chunk = order[s:s + per]
+        rows = (len(chunk) + COLS - 1) // COLS
+        sheet = Image.new("RGB", (T * COLS, T * rows), (255, 255, 255))
+        name = f"p{s // per}.jpg"
+        for i, u in enumerate(chunk):
+            c, r = i % COLS, i // COLS
+            sheet.paste(tiles[u], (c * T, r * T))
+            where[u] = {"f": f"sprites/{name}", "c": c, "r": r, "cols": COLS, "rows": rows, "shape": "square"}
+        sheet.save(OUT / name, "JPEG", quality=78, optimize=True, progressive=True)
 
-# The artifact host blocks remote images, so the snapshot relies on sprites only.
-for d in data["deals"]:
-    d["image"] = None
-DEALS.write_text(json.dumps(data, indent=1))
-print(f"{len(tiles)} covers in {(len(tiles) + per - 1) // per} sheets")
+    for d in deals:
+        d.pop("sprite", None)
+        if d.get("image") in where:
+            d["sprite"] = where[d["image"]]
+        d["image"] = None  # sprites only, so the page works on hosts that block remote images
+    DEALS.write_text(json.dumps(data, separators=(",", ":")))
+    print(f"{len(where)} photos of {len(urls)} in {(len(order) + per - 1) // per} sheets")
+
+
+if __name__ == "__main__":
+    main()

@@ -93,6 +93,7 @@
     if (d.sprite) {
       const { f, c, r, cols, rows } = d.sprite;
       const pos = `background-image:url(${esc(f)});background-size:${cols * 100}% ${rows * 100}%;background-position:${cols > 1 ? (c / (cols - 1)) * 100 : 0}% ${rows > 1 ? (r / (rows - 1)) * 100 : 0}%`;
+      if (d.sprite.shape === "square") return { hue: 0, photo: true, inner: `<span class="cv sq" role="img" aria-label="${esc(d.title)}" style="${pos}"></span>` };
       return { hue: CAT_HUE[d.category] ?? 0, cover: true, inner: `<span class="cv bg" style="${pos}"></span><span class="cv fg" style="${pos}"></span>` };
     }
     const inner = d.image
@@ -186,7 +187,7 @@
   }
   const linkTitle = (d) => d.linkKind === "article" || !d.store ? `Opens the ${d.source} article that lists this deal` : d.linkKind === "page" ? `Opens ${d.store}'s Black Friday deals page` : d.kind === "sale" ? `Opens ${d.store}'s sale page` : d.exact === false ? `Opens a search for this product on ${d.store}` : `Opens this product's page on ${d.store}`;
   function cardHTML(d, i) {
-    const { hue, inner, cover } = picture(d, i < 4);
+    const { hue, inner, cover, photo } = picture(d, i < 4);
     const url = esc(safeUrl(d.url));
     const shopLabel = linkLabel(d, true);
     const linkTip = esc(linkTitle(d));
@@ -199,7 +200,7 @@
       : `<small class="via">From ${esc(d.source)}</small>`;
     const on = saved.has(d.id);
     return `<article class="card">
-      <a class="pic${cover ? " cover" : ""}" href="${url}" title="${linkTip}" target="_blank" rel="noopener nofollow" style="--h:${hue}" tabindex="-1" aria-hidden="true">${inner}${off}${note}</a>
+      <a class="pic${cover ? " cover" : ""}${photo ? " photo" : ""}" href="${url}" title="${linkTip}" target="_blank" rel="noopener nofollow" style="--h:${hue}" tabindex="-1" aria-hidden="true">${inner}${off}${note}</a>
       <div class="info">
         <div class="meta" style="--c:${STORE_COLOR[d.store] || "#999"}"><i></i>${esc(d.store || (d.sourceUrl ? "Several stores" : d.source))}${d.brand && d.brand !== d.store ? `<span class="brand">${esc(d.brand)}</span>` : ""}</div>
         <h3><a href="${url}" title="${linkTip}" target="_blank" rel="noopener nofollow">${esc(d.title)}</a></h3>
@@ -288,9 +289,9 @@
     const top = deals.filter((d) => d.price != null && d.percentOff && !d.upTo).sort((a, b) => rank(b) - rank(a)).slice(0, 6);
     if (!top.length) { $("#spot").hidden = true; return; }
     $("#spot").innerHTML = `<div class="spot-track" id="spotTrack" tabindex="0" aria-label="Top deals. Use the arrow keys to browse.">${top.map((d, i) => {
-      const { hue, inner, cover } = picture(d, true);
+      const { hue, inner, cover, photo } = picture(d, true);
       return `<a class="slide" href="${esc(safeUrl(d.url))}" target="_blank" rel="noopener nofollow" aria-label="Top deal ${i + 1} of ${top.length}: ${esc(d.title)}, ${fmt(d.price)} at ${esc(d.store)}">
-        <span class="pic${cover ? " cover" : ""}" style="--h:${hue}">${inner}<span class="off">-${d.percentOff}%</span></span>
+        <span class="pic${cover ? " cover" : ""}${photo ? " photo" : ""}" style="--h:${hue}">${inner}<span class="off">-${d.percentOff}%</span></span>
         <span class="s-body"><span class="label">Top deal · ${esc(d.store)}</span><h2>${esc(d.title)}</h2>
         <span class="prices"><b class="now">${fmt(d.price)}</b>${d.originalPrice ? `<s>${fmt(d.originalPrice)}</s>` : ""}</span>
         <span class="go">${linkLabel(d, false)}</span></span></a>`;

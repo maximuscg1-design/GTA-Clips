@@ -214,3 +214,9 @@ h1 { font: 400 clamp(36px, 5.2vw, 64px)/1.02 Anton, Impact, sans-serif; margin: 
 .rate .good { color: var(--grn); }
 .also { font-size: 12px; color: var(--mute); }
 .also a { color: inherit; }
+
+/* real product photos (square sprite tiles) on white */
+.pic.photo, :root[data-theme=dark] .pic.photo { background: #fff; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme=light]) .pic.photo { background: #fff; } }
+.cv.sq { left: 50%; top: 50%; height: 88%; aspect-ratio: 1; transform: translate(-50%, -50%); transition: transform .25s ease; }
+.card:hover .cv.sq { transform: translate(-50%, -50%) scale(1.05); }

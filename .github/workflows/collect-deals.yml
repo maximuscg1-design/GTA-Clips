@@ -1,0 +1,49 @@
+name: Collect deals
+
+# Runs on GitHub's servers (which can reach the deal feeds), gathers deals and
+# their photos, packs the photos into sprite sheets, and commits the result back
+# to the branch. Trigger it by changing black-friday-deals/collect.txt.
+on:
+  push:
+    paths: ["black-friday-deals/collect.txt"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: collect-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: black-friday-deals
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pillow==11.3.0
+      - run: npm test
+      - name: Fetch deals from all feeds (adds to the deals already here)
+        run: node scripts/fetch-deals.mjs
+      - name: Download photos and build sprite sheets
+        run: python3 -I scripts/build-sprites.py --download
+      - name: Summary
+        run: |
+          node -e 'const d=require("./public/deals.json"); const ok=d.sources.filter(s=>s.ok).length; console.log(`${d.deals.length} deals, ${d.deals.filter(x=>x.sprite).length} with photos, ${ok}/${d.sources.length} feeds ok`); for (const s of d.sources.filter(s=>!s.ok).slice(0,15)) console.log("  failed:", s.name, s.error)' | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Commit results to the branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/deals.json public/sprites
+          git commit -m "Collect deals and photos" || echo "nothing to commit"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

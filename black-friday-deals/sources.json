@@ -190,5 +190,551 @@
   "name": "r/AppleDeals",
   "url": "https://www.reddit.com/r/appledeals/new/.rss",
   "weight": 0.9
+ },
+ {
+  "id": "slickdeals-ps5-controller",
+  "name": "Slickdeals: ps5 controller",
+  "url": "https://slickdeals.net/newsearch.php?q=ps5+controller&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-playstation-portal",
+  "name": "Slickdeals: playstation portal",
+  "url": "https://slickdeals.net/newsearch.php?q=playstation+portal&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-psvr2",
+  "name": "Slickdeals: psvr2",
+  "url": "https://slickdeals.net/newsearch.php?q=psvr2&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-ps5-pro",
+  "name": "Slickdeals: ps5 pro",
+  "url": "https://slickdeals.net/newsearch.php?q=ps5+pro&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-ps5-slim",
+  "name": "Slickdeals: ps5 slim",
+  "url": "https://slickdeals.net/newsearch.php?q=ps5+slim&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-ps5-bundle",
+  "name": "Slickdeals: ps5 bundle",
+  "url": "https://slickdeals.net/newsearch.php?q=ps5+bundle&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-call-of-duty-ps5",
+  "name": "Slickdeals: call of duty ps5",
+  "url": "https://slickdeals.net/newsearch.php?q=call+of+duty+ps5&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-ea-fc-ps5",
+  "name": "Slickdeals: ea fc ps5",
+  "url": "https://slickdeals.net/newsearch.php?q=ea+fc+ps5&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-nba-2k-ps5",
+  "name": "Slickdeals: nba 2k ps5",
+  "url": "https://slickdeals.net/newsearch.php?q=nba+2k+ps5&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-madden-ps5",
+  "name": "Slickdeals: madden ps5",
+  "url": "https://slickdeals.net/newsearch.php?q=madden+ps5&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-nintendo-switch-2",
+  "name": "Slickdeals: nintendo switch 2",
+  "url": "https://slickdeals.net/newsearch.php?q=nintendo+switch+2&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-switch-2-game",
+  "name": "Slickdeals: switch 2 game",
+  "url": "https://slickdeals.net/newsearch.php?q=switch+2+game&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-meta-quest",
+  "name": "Slickdeals: meta quest",
+  "url": "https://slickdeals.net/newsearch.php?q=meta+quest&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-gaming-chair",
+  "name": "Slickdeals: gaming chair",
+  "url": "https://slickdeals.net/newsearch.php?q=gaming+chair&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-gaming-monitor",
+  "name": "Slickdeals: gaming monitor",
+  "url": "https://slickdeals.net/newsearch.php?q=gaming+monitor&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-oled-monitor",
+  "name": "Slickdeals: oled monitor",
+  "url": "https://slickdeals.net/newsearch.php?q=oled+monitor&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-gaming-keyboard",
+  "name": "Slickdeals: gaming keyboard",
+  "url": "https://slickdeals.net/newsearch.php?q=gaming+keyboard&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-gaming-mouse",
+  "name": "Slickdeals: gaming mouse",
+  "url": "https://slickdeals.net/newsearch.php?q=gaming+mouse&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-samsung-tv",
+  "name": "Slickdeals: samsung tv",
+  "url": "https://slickdeals.net/newsearch.php?q=samsung+tv&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-lg-tv",
+  "name": "Slickdeals: lg tv",
+  "url": "https://slickdeals.net/newsearch.php?q=lg+tv&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-sony-tv",
+  "name": "Slickdeals: sony tv",
+  "url": "https://slickdeals.net/newsearch.php?q=sony+tv&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-tcl-tv",
+  "name": "Slickdeals: tcl tv",
+  "url": "https://slickdeals.net/newsearch.php?q=tcl+tv&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-hisense-tv",
+  "name": "Slickdeals: hisense tv",
+  "url": "https://slickdeals.net/newsearch.php?q=hisense+tv&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-vizio-tv",
+  "name": "Slickdeals: vizio tv",
+  "url": "https://slickdeals.net/newsearch.php?q=vizio+tv&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-65-inch-tv",
+  "name": "Slickdeals: 65 inch tv",
+  "url": "https://slickdeals.net/newsearch.php?q=65+inch+tv&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-75-inch-tv",
+  "name": "Slickdeals: 75 inch tv",
+  "url": "https://slickdeals.net/newsearch.php?q=75+inch+tv&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-85-inch-tv",
+  "name": "Slickdeals: 85 inch tv",
+  "url": "https://slickdeals.net/newsearch.php?q=85+inch+tv&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-4k-tv",
+  "name": "Slickdeals: 4k tv",
+  "url": "https://slickdeals.net/newsearch.php?q=4k+tv&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-projector",
+  "name": "Slickdeals: projector",
+  "url": "https://slickdeals.net/newsearch.php?q=projector&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-soundbar",
+  "name": "Slickdeals: soundbar",
+  "url": "https://slickdeals.net/newsearch.php?q=soundbar&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-roku",
+  "name": "Slickdeals: roku",
+  "url": "https://slickdeals.net/newsearch.php?q=roku&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-fire-tv",
+  "name": "Slickdeals: fire tv",
+  "url": "https://slickdeals.net/newsearch.php?q=fire+tv&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-apple-tv",
+  "name": "Slickdeals: apple tv",
+  "url": "https://slickdeals.net/newsearch.php?q=apple+tv&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-apple",
+  "name": "Slickdeals: apple",
+  "url": "https://slickdeals.net/newsearch.php?q=apple&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-airpods-pro",
+  "name": "Slickdeals: airpods pro",
+  "url": "https://slickdeals.net/newsearch.php?q=airpods+pro&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-ipad-air",
+  "name": "Slickdeals: ipad air",
+  "url": "https://slickdeals.net/newsearch.php?q=ipad+air&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-ipad-pro",
+  "name": "Slickdeals: ipad pro",
+  "url": "https://slickdeals.net/newsearch.php?q=ipad+pro&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-ipad-mini",
+  "name": "Slickdeals: ipad mini",
+  "url": "https://slickdeals.net/newsearch.php?q=ipad+mini&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-macbook-air",
+  "name": "Slickdeals: macbook air",
+  "url": "https://slickdeals.net/newsearch.php?q=macbook+air&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-macbook-pro",
+  "name": "Slickdeals: macbook pro",
+  "url": "https://slickdeals.net/newsearch.php?q=macbook+pro&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-imac",
+  "name": "Slickdeals: imac",
+  "url": "https://slickdeals.net/newsearch.php?q=imac&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-mac-mini",
+  "name": "Slickdeals: mac mini",
+  "url": "https://slickdeals.net/newsearch.php?q=mac+mini&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-apple-pencil",
+  "name": "Slickdeals: apple pencil",
+  "url": "https://slickdeals.net/newsearch.php?q=apple+pencil&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-samsung-galaxy-s26",
+  "name": "Slickdeals: samsung galaxy s26",
+  "url": "https://slickdeals.net/newsearch.php?q=samsung+galaxy+s26&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-galaxy-tab",
+  "name": "Slickdeals: galaxy tab",
+  "url": "https://slickdeals.net/newsearch.php?q=galaxy+tab&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-galaxy-watch",
+  "name": "Slickdeals: galaxy watch",
+  "url": "https://slickdeals.net/newsearch.php?q=galaxy+watch&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-galaxy-buds",
+  "name": "Slickdeals: galaxy buds",
+  "url": "https://slickdeals.net/newsearch.php?q=galaxy+buds&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-pixel-watch",
+  "name": "Slickdeals: pixel watch",
+  "url": "https://slickdeals.net/newsearch.php?q=pixel+watch&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-pixel-buds",
+  "name": "Slickdeals: pixel buds",
+  "url": "https://slickdeals.net/newsearch.php?q=pixel+buds&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-unlocked-phone",
+  "name": "Slickdeals: unlocked phone",
+  "url": "https://slickdeals.net/newsearch.php?q=unlocked+phone&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-motorola",
+  "name": "Slickdeals: motorola",
+  "url": "https://slickdeals.net/newsearch.php?q=motorola&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-oneplus",
+  "name": "Slickdeals: oneplus",
+  "url": "https://slickdeals.net/newsearch.php?q=oneplus&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-dell-laptop",
+  "name": "Slickdeals: dell laptop",
+  "url": "https://slickdeals.net/newsearch.php?q=dell+laptop&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-hp-laptop",
+  "name": "Slickdeals: hp laptop",
+  "url": "https://slickdeals.net/newsearch.php?q=hp+laptop&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-lenovo-laptop",
+  "name": "Slickdeals: lenovo laptop",
+  "url": "https://slickdeals.net/newsearch.php?q=lenovo+laptop&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-asus-laptop",
+  "name": "Slickdeals: asus laptop",
+  "url": "https://slickdeals.net/newsearch.php?q=asus+laptop&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-acer-laptop",
+  "name": "Slickdeals: acer laptop",
+  "url": "https://slickdeals.net/newsearch.php?q=acer+laptop&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-gaming-laptop",
+  "name": "Slickdeals: gaming laptop",
+  "url": "https://slickdeals.net/newsearch.php?q=gaming+laptop&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-chromebook",
+  "name": "Slickdeals: chromebook",
+  "url": "https://slickdeals.net/newsearch.php?q=chromebook&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-surface",
+  "name": "Slickdeals: surface",
+  "url": "https://slickdeals.net/newsearch.php?q=surface&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-bose",
+  "name": "Slickdeals: bose",
+  "url": "https://slickdeals.net/newsearch.php?q=bose&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-sony-headphones",
+  "name": "Slickdeals: sony headphones",
+  "url": "https://slickdeals.net/newsearch.php?q=sony+headphones&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-beats",
+  "name": "Slickdeals: beats",
+  "url": "https://slickdeals.net/newsearch.php?q=beats&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-jbl",
+  "name": "Slickdeals: jbl",
+  "url": "https://slickdeals.net/newsearch.php?q=jbl&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-earbuds",
+  "name": "Slickdeals: earbuds",
+  "url": "https://slickdeals.net/newsearch.php?q=earbuds&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-bluetooth-speaker",
+  "name": "Slickdeals: bluetooth speaker",
+  "url": "https://slickdeals.net/newsearch.php?q=bluetooth+speaker&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-sonos",
+  "name": "Slickdeals: sonos",
+  "url": "https://slickdeals.net/newsearch.php?q=sonos&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-kindle",
+  "name": "Slickdeals: kindle",
+  "url": "https://slickdeals.net/newsearch.php?q=kindle&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-echo",
+  "name": "Slickdeals: echo",
+  "url": "https://slickdeals.net/newsearch.php?q=echo&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-ring",
+  "name": "Slickdeals: ring",
+  "url": "https://slickdeals.net/newsearch.php?q=ring&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-blink",
+  "name": "Slickdeals: blink",
+  "url": "https://slickdeals.net/newsearch.php?q=blink&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-google-nest",
+  "name": "Slickdeals: google nest",
+  "url": "https://slickdeals.net/newsearch.php?q=google+nest&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-eero",
+  "name": "Slickdeals: eero",
+  "url": "https://slickdeals.net/newsearch.php?q=eero&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-mesh-wifi",
+  "name": "Slickdeals: mesh wifi",
+  "url": "https://slickdeals.net/newsearch.php?q=mesh+wifi&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-router",
+  "name": "Slickdeals: router",
+  "url": "https://slickdeals.net/newsearch.php?q=router&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-robot-vacuum",
+  "name": "Slickdeals: robot vacuum",
+  "url": "https://slickdeals.net/newsearch.php?q=robot+vacuum&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-garmin",
+  "name": "Slickdeals: garmin",
+  "url": "https://slickdeals.net/newsearch.php?q=garmin&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-fitbit",
+  "name": "Slickdeals: fitbit",
+  "url": "https://slickdeals.net/newsearch.php?q=fitbit&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-gopro",
+  "name": "Slickdeals: gopro",
+  "url": "https://slickdeals.net/newsearch.php?q=gopro&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-dji",
+  "name": "Slickdeals: dji",
+  "url": "https://slickdeals.net/newsearch.php?q=dji&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-camera",
+  "name": "Slickdeals: camera",
+  "url": "https://slickdeals.net/newsearch.php?q=camera&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-ring-light",
+  "name": "Slickdeals: ring light",
+  "url": "https://slickdeals.net/newsearch.php?q=ring+light&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-microsd",
+  "name": "Slickdeals: microsd",
+  "url": "https://slickdeals.net/newsearch.php?q=microsd&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-external-hard-drive",
+  "name": "Slickdeals: external hard drive",
+  "url": "https://slickdeals.net/newsearch.php?q=external+hard+drive&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-portable-ssd",
+  "name": "Slickdeals: portable ssd",
+  "url": "https://slickdeals.net/newsearch.php?q=portable+ssd&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-nvme",
+  "name": "Slickdeals: nvme",
+  "url": "https://slickdeals.net/newsearch.php?q=nvme&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-flash-drive",
+  "name": "Slickdeals: flash drive",
+  "url": "https://slickdeals.net/newsearch.php?q=flash+drive&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-power-bank",
+  "name": "Slickdeals: power bank",
+  "url": "https://slickdeals.net/newsearch.php?q=power+bank&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-anker",
+  "name": "Slickdeals: anker",
+  "url": "https://slickdeals.net/newsearch.php?q=anker&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-usb-c-charger",
+  "name": "Slickdeals: usb-c charger",
+  "url": "https://slickdeals.net/newsearch.php?q=usb-c+charger&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-smart-watch",
+  "name": "Slickdeals: smart watch",
+  "url": "https://slickdeals.net/newsearch.php?q=smart+watch&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
  }
 ]
