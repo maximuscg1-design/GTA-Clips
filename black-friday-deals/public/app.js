@@ -149,7 +149,8 @@
   const ratingKey = (d) => d.rating ? d.rating.percent - 20 / Math.log10(10 + (d.rating.count || 0)) : d.metacritic ? d.metacritic - 5 : -1;
   const pctKey = (d) => (d.upTo ? -1 : d.percentOff ?? -1);
   const SORTS = {
-    score: (a, b) => b.score - a.score,
+    // Deals with a real product photo rank a little higher by default.
+    score: (a, b) => (b.score + (b.sprite ? 20 : 0)) - (a.score + (a.sprite ? 20 : 0)),
     percent: (a, b) => pctKey(b) - pctKey(a) || b.score - a.score,
     savings: (a, b) => savings(b) - savings(a) || b.score - a.score,
     priceAsc: (a, b) => (a.price ?? Infinity) - (b.price ?? Infinity),
@@ -286,7 +287,7 @@
   // spotlight carousel
   function renderSpot() {
     const rank = (d) => d.percentOff + savings(d) * 0.05 + (d.rating ? (d.rating.percent - 85) : 0) + (d.metacritic ? d.metacritic - 80 : 0);
-    const top = deals.filter((d) => d.price != null && d.percentOff && !d.upTo).sort((a, b) => rank(b) - rank(a)).slice(0, 6);
+    const top = deals.filter((d) => d.price != null && d.percentOff && !d.upTo && (d.sprite || !deals.some((x) => x.sprite))).sort((a, b) => rank(b) - rank(a)).slice(0, 6);
     if (!top.length) { $("#spot").hidden = true; return; }
     $("#spot").innerHTML = `<div class="spot-track" id="spotTrack" tabindex="0" aria-label="Top deals. Use the arrow keys to browse.">${top.map((d, i) => {
       const { hue, inner, cover, photo } = picture(d, true);

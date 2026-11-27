@@ -85,6 +85,7 @@ export const TECH = new Set(["Gaming", "PS5 Games", "Switch & Xbox Games", "Stor
 
 // Order matters: first match wins. Names match the categories the site uses.
 const CATEGORIES = [
+  ["Books", /\b(e-?books?|kindle (kids )?books?|kindle edition)\b|\| ?kindle\b|^free, kindle/i],
   ["Gaming", /\b(dualsense|dualshock|controller|ps5 (slim|pro|console|digital)|playstation (5 )?(console|portal|vr2?)|ps ?portal|ps ?vr2|pulse (elite|explore)|gaming headset|headset|switch 2 (console|bundle)|xbox series|steam deck|joy-?con|meta quest)\b/i],
   ["PS5 Games", /\b(ps5|playstation 5|ps4)\b/i],
   ["Switch & Xbox Games", /\b(switch|nintendo|xbox)\b/i],
@@ -111,7 +112,9 @@ export function extractPrices(text) {
   const orig = t.match(/(?:reg\.?|regular|was|list|msrp|orig(?:inally)?\.?|retail|normally|compare at)\s*(?:price)?\s*:?\s*\$\s?([\d,]+(?:\.\d{2})?)/i);
   if (orig) original = money(orig[1]);
 
-  if (/\bfree\b/i.test(t) && !/free shipping|free ship|\+ ?free|w\/ ?free|with free/i.test(t)) price = 0;
+  // "Free" only when the deal itself is free: "FREE", "for free", "free w/ ...", "$0" (not "Stress Free", "Glare-Free").
+  if (/(^|[\s(\[|:]|\s[-–]\s*)free(\s*$|\s*[!)\]]|\s+((after|with|game|games|download|to keep|trial|for)\b|w\/))|\bfor free\b|\$0(\.00)?\b(?!\.\d)/i.test(t)
+      && !/(\w-free|stress free|free shipping|free ship|\+ ?free|w\/ ?free (s|ship)|with free (s|ship))/i.test(t)) price = 0;
 
   for (const m of t.matchAll(/\$\s?([\d,]+(?:\.\d{1,2})?)/g)) {
     const before = t.slice(Math.max(0, m.index - 22), m.index).toLowerCase();

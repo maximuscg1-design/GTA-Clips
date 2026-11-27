@@ -72,3 +72,11 @@ test("store comes from visible text, not HTML attributes", () => {
   const e = buildDeal({ title: "[Prime] Some Gadget $9", link: "https://slickdeals.net/f/2", date: "", html: '<a target="_blank">x</a>', image: "" }, { id: "s", name: "s" });
   assert.equal(e.store, "");
 });
+
+test("free only when the deal is free", () => {
+  assert.notEqual(extractPrices("JVC Earbuds, Noise Cancelling, Stress Free Earpieces").price, 0);
+  assert.notEqual(extractPrices("Samsung 65\" S90H OLED Glare-Free TV").price, 0);
+  assert.equal(extractPrices("[Epic Games] Some Game - FREE").price, 0);
+  assert.equal(extractPrices("Get Pixel Buds FREE w/ purchase").price, 0);
+  assert.equal(extractPrices("Drill $99 + Free Shipping").price, 99);
+});
