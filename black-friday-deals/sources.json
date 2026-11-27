@@ -1,13 +1,194 @@
 [
-  { "id": "slickdeals-frontpage", "name": "Slickdeals Frontpage", "url": "https://slickdeals.net/newsearch.php?mode=frontpage&searcharea=deals&searchin=first&rss=1", "weight": 1.2 },
-  { "id": "slickdeals-popular", "name": "Slickdeals Popular", "url": "https://slickdeals.net/newsearch.php?mode=popdeals&searcharea=deals&searchin=first&rss=1", "weight": 1.1 },
-  { "id": "slickdeals-blackfriday", "name": "Slickdeals Black Friday", "url": "https://slickdeals.net/newsearch.php?q=black+friday&searcharea=deals&searchin=first&rss=1", "weight": 1.2 },
-  { "id": "dealnews", "name": "DealNews", "url": "https://www.dealnews.com/?rss=1&sort=time", "weight": 1.0 },
-  { "id": "bensbargains", "name": "Ben's Bargains", "url": "https://bensbargains.com/rss/", "weight": 0.9 },
-  { "id": "reddit-deals", "name": "r/deals", "url": "https://www.reddit.com/r/deals/new/.rss", "weight": 0.9 },
-  { "id": "reddit-buildapcsales", "name": "r/buildapcsales", "url": "https://www.reddit.com/r/buildapcsales/new/.rss", "weight": 1.0 },
-  { "id": "reddit-gamedeals", "name": "r/GameDeals", "url": "https://www.reddit.com/r/GameDeals/new/.rss", "weight": 1.0 },
-  { "id": "reddit-frugalmalefashion", "name": "r/frugalmalefashion", "url": "https://www.reddit.com/r/frugalmalefashion/new/.rss", "weight": 0.8 },
-  { "id": "reddit-appledeals", "name": "r/AppleDeals", "url": "https://www.reddit.com/r/appledeals/new/.rss", "weight": 0.9 },
-  { "id": "reddit-blackfriday", "name": "r/blackfriday", "url": "https://www.reddit.com/r/blackfriday/new/.rss", "weight": 1.0 }
+ {
+  "id": "slickdeals-frontpage",
+  "name": "Slickdeals Frontpage",
+  "url": "https://slickdeals.net/newsearch.php?mode=frontpage&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.2
+ },
+ {
+  "id": "slickdeals-popular",
+  "name": "Slickdeals Popular",
+  "url": "https://slickdeals.net/newsearch.php?mode=popdeals&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.1
+ },
+ {
+  "id": "slickdeals-blackfriday",
+  "name": "Slickdeals: Black Friday",
+  "url": "https://slickdeals.net/newsearch.php?q=black+friday&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.1
+ },
+ {
+  "id": "slickdeals-ps5",
+  "name": "Slickdeals: PS5",
+  "url": "https://slickdeals.net/newsearch.php?q=ps5&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-playstation",
+  "name": "Slickdeals: PlayStation",
+  "url": "https://slickdeals.net/newsearch.php?q=playstation&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-dualsense",
+  "name": "Slickdeals: DualSense",
+  "url": "https://slickdeals.net/newsearch.php?q=dualsense&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-ps5-game",
+  "name": "Slickdeals: PS5 games",
+  "url": "https://slickdeals.net/newsearch.php?q=ps5+game&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-nintendo-switch",
+  "name": "Slickdeals: Nintendo Switch",
+  "url": "https://slickdeals.net/newsearch.php?q=nintendo+switch&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-xbox",
+  "name": "Slickdeals: Xbox",
+  "url": "https://slickdeals.net/newsearch.php?q=xbox&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-gaming-headset",
+  "name": "Slickdeals: Gaming headsets",
+  "url": "https://slickdeals.net/newsearch.php?q=gaming+headset&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-controller",
+  "name": "Slickdeals: Controllers",
+  "url": "https://slickdeals.net/newsearch.php?q=controller&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-tv",
+  "name": "Slickdeals: TVs",
+  "url": "https://slickdeals.net/newsearch.php?q=tv&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-oled",
+  "name": "Slickdeals: OLED TVs",
+  "url": "https://slickdeals.net/newsearch.php?q=oled&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-ipad",
+  "name": "Slickdeals: iPad",
+  "url": "https://slickdeals.net/newsearch.php?q=ipad&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-iphone",
+  "name": "Slickdeals: iPhone",
+  "url": "https://slickdeals.net/newsearch.php?q=iphone&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-samsung-galaxy",
+  "name": "Slickdeals: Samsung Galaxy",
+  "url": "https://slickdeals.net/newsearch.php?q=samsung+galaxy&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-pixel",
+  "name": "Slickdeals: Google Pixel",
+  "url": "https://slickdeals.net/newsearch.php?q=pixel&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-laptop",
+  "name": "Slickdeals: Laptops",
+  "url": "https://slickdeals.net/newsearch.php?q=laptop&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-macbook",
+  "name": "Slickdeals: MacBook",
+  "url": "https://slickdeals.net/newsearch.php?q=macbook&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-airpods",
+  "name": "Slickdeals: AirPods",
+  "url": "https://slickdeals.net/newsearch.php?q=airpods&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-headphones",
+  "name": "Slickdeals: Headphones",
+  "url": "https://slickdeals.net/newsearch.php?q=headphones&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-apple-watch",
+  "name": "Slickdeals: Apple Watch",
+  "url": "https://slickdeals.net/newsearch.php?q=apple+watch&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-monitor",
+  "name": "Slickdeals: Monitors",
+  "url": "https://slickdeals.net/newsearch.php?q=monitor&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-ssd",
+  "name": "Slickdeals: SSDs",
+  "url": "https://slickdeals.net/newsearch.php?q=ssd&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-tablet",
+  "name": "Slickdeals: Tablets",
+  "url": "https://slickdeals.net/newsearch.php?q=tablet&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "slickdeals-smartwatch",
+  "name": "Slickdeals: Smartwatches",
+  "url": "https://slickdeals.net/newsearch.php?q=smartwatch&searcharea=deals&searchin=first&rss=1",
+  "weight": 1.0
+ },
+ {
+  "id": "dealnews",
+  "name": "DealNews",
+  "url": "https://www.dealnews.com/?rss=1&sort=time",
+  "weight": 1.0
+ },
+ {
+  "id": "reddit-deals",
+  "name": "r/deals",
+  "url": "https://www.reddit.com/r/deals/new/.rss",
+  "weight": 0.9
+ },
+ {
+  "id": "reddit-deals-ps5",
+  "name": "r/deals: PS5",
+  "url": "https://www.reddit.com/r/deals/search.rss?q=ps5&restrict_sr=1&sort=new",
+  "weight": 1.0
+ },
+ {
+  "id": "reddit-gamedeals-ps5",
+  "name": "r/GameDeals: PS5",
+  "url": "https://www.reddit.com/r/GameDeals/search.rss?q=ps5&restrict_sr=1&sort=new",
+  "weight": 1.0
+ },
+ {
+  "id": "reddit-buildapcsales",
+  "name": "r/buildapcsales",
+  "url": "https://www.reddit.com/r/buildapcsales/new/.rss",
+  "weight": 0.9
+ },
+ {
+  "id": "reddit-appledeals",
+  "name": "r/AppleDeals",
+  "url": "https://www.reddit.com/r/appledeals/new/.rss",
+  "weight": 0.9
+ }
 ]

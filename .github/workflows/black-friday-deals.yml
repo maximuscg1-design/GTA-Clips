@@ -32,9 +32,12 @@ jobs:
         with:
           node-version: 22
       - run: npm test
-      - name: Fetch latest deals
+      - id: pages
+        uses: actions/configure-pages@v5
+      - name: Fetch latest deals (adds to the deals already published)
         run: npm run fetch
-      - uses: actions/configure-pages@v5
+        env:
+          PREVIOUS_DEALS_URL: ${{ steps.pages.outputs.base_url }}/deals.json
       - uses: actions/upload-pages-artifact@v3
         with:
           path: black-friday-deals/public

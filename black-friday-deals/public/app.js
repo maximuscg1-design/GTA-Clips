@@ -201,7 +201,7 @@
     return `<article class="card">
       <a class="pic${cover ? " cover" : ""}" href="${url}" title="${linkTip}" target="_blank" rel="noopener nofollow" style="--h:${hue}" tabindex="-1" aria-hidden="true">${inner}${off}${note}</a>
       <div class="info">
-        <div class="meta" style="--c:${STORE_COLOR[d.store] || "#999"}"><i></i>${esc(d.store || "Several stores")}${d.brand && d.brand !== d.store ? `<span class="brand">${esc(d.brand)}</span>` : ""}</div>
+        <div class="meta" style="--c:${STORE_COLOR[d.store] || "#999"}"><i></i>${esc(d.store || (d.sourceUrl ? "Several stores" : d.source))}${d.brand && d.brand !== d.store ? `<span class="brand">${esc(d.brand)}</span>` : ""}</div>
         <h3><a href="${url}" title="${linkTip}" target="_blank" rel="noopener nofollow">${esc(d.title)}</a></h3>
         ${price}${save}${rateLine(d)}${alsoLine(d)}
         <div class="row"><a class="go${d.exact === false ? " search" : ""}" href="${url}" title="${linkTip}" target="_blank" rel="noopener nofollow">${shopLabel}</a>

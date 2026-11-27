@@ -81,18 +81,22 @@ const STORES = [
   ["Dick's", /\bdick'?s sporting\b/i], ["Kohl's", /\bkohls\.com\b/i], ["AliExpress", /aliexpress/i],
 ];
 
+// Order matters: first match wins. Names match the categories the site uses.
 const CATEGORIES = [
-  ["Games", /\b(game|ps5|playstation|xbox|switch|nintendo|steam|gog|dlc|bundle|controller)\b/i],
-  ["PC Parts", /\b(gpu|rtx|radeon|rx ?\d{4}|cpu|ryzen|intel core|ssd|nvme|ram|ddr[45]|motherboard|psu|monitor|keyboard|mouse|case)\b/i],
-  ["Laptops & Tablets", /\b(laptop|notebook|macbook|chromebook|ipad|tablet|surface)\b/i],
-  ["Phones & Wearables", /\b(iphone|pixel|galaxy s|phone|airpods|earbuds|watch|smartwatch|fitbit|garmin)\b/i],
-  ["TV & Audio", /\b(tv|oled|qled|soundbar|speaker|headphones?|sonos|bose|roku|fire stick|projector)\b/i],
-  ["Smart Home", /\b(echo|alexa|nest|ring|smart plug|smart home|robot vacuum|roomba|camera|doorbell)\b/i],
+  ["Gaming", /\b(dualsense|dualshock|controller|ps5 (slim|pro|console|digital)|playstation (5 )?(console|portal|vr2?)|ps ?portal|ps ?vr2|pulse (elite|explore)|gaming headset|headset|switch 2 (console|bundle)|xbox series|steam deck|joy-?con|meta quest)\b/i],
+  ["PS5 Games", /\b(ps5|playstation 5|ps4)\b/i],
+  ["Switch & Xbox Games", /\b(switch|nintendo|xbox)\b/i],
+  ["Storage", /\b(ssd|nvme|m\.2|microsd|micro sd|sd card|hard drive|hdd|flash drive|portable drive)\b/i],
+  ["TVs & Streaming", /\b(tv|oled|qled|mini-?led|projector|roku|fire tv|fire stick|chromecast|apple tv)\b/i],
+  ["Laptops & Tablets", /\b(laptop|notebook|macbook|chromebook|ipad|tablet|surface|kindle)\b/i],
+  ["Phones & Wearables", /\b(iphone|pixel|galaxy (s|z|a)\d*|phone|smartwatch|apple watch|galaxy watch|fitbit|garmin|airtag|oura)\b/i],
+  ["Headphones & Audio", /\b(airpods|earbuds|headphones?|soundbar|speaker|sonos|bose|beats|jbl)\b/i],
+  ["PC Parts", /\b(gpu|rtx|radeon|rx ?\d{4}|cpu|ryzen|intel core|ram|ddr[45]|motherboard|psu|monitor|keyboard|mouse)\b/i],
+  ["Smart Home", /\b(echo|alexa|nest|ring|smart plug|smart home|robot vacuum|roomba|camera|doorbell|blink)\b/i],
+  ["Cameras & Drones", /\b(gopro|dji|drone|mirrorless|dslr)\b/i],
   ["Home & Kitchen", /\b(vacuum|air fryer|instant pot|blender|mattress|cookware|kitchen|coffee|dyson|ninja|kitchenaid)\b/i],
-  ["Clothing & Shoes", /\b(shirt|jacket|hoodie|jeans|shoes|sneakers|boots|apparel|clothing|coat|socks)\b/i],
-  ["Tools & Outdoor", /\b(drill|dewalt|milwaukee|ryobi|tool|grill|outdoor|camping|bike|generator)\b/i],
-  ["Toys", /\b(lego|toys?|barbie|building blocks|playset|hot wheels|kids)\b/i],
-  ["Beauty & Health", /\b(skincare|makeup|shaver|razor|toothbrush|vitamin|beauty)\b/i],
+  ["Tools & Outdoor", /\b(drill|dewalt|milwaukee|ryobi|tool|grill|generator)\b/i],
+  ["Toys", /\b(lego|toys?|playset|hot wheels)\b/i],
 ];
 
 const money = (s) => Number(s.replace(/[,$]/g, ""));
@@ -182,6 +186,8 @@ export function buildDeal(item, source) {
     title,
     url: link,
     discussionUrl: link !== item.link ? item.link : null,
+    // Reddit posts carry the store link (a product page); other feeds link to the deal post.
+    linkKind: link !== item.link ? "product" : "article",
     store: detectStore(title, link, item.html) || hostname(link).split(".").slice(-2, -1)[0]?.replace(/^\w/, (c) => c.toUpperCase()) || "",
     category: detectCategory(title),
     price,
@@ -233,6 +239,27 @@ async function fetchSource(source) {
   }
 }
 
+// Load the previously published deals so the list keeps growing between runs
+// (deals expire after MAX_AGE_DAYS). PREVIOUS_DEALS_URL points at the live site.
+async function previousDeals() {
+  const url = process.env.PREVIOUS_DEALS_URL;
+  if (url) {
+    try {
+      const res = await fetch(url, { headers: { "User-Agent": UA }, signal: AbortSignal.timeout(TIMEOUT_MS) });
+      if (res.ok) return (await res.json()).deals || [];
+    } catch {}
+  }
+  try { return JSON.parse(await readFile(OUT, "utf8")).deals || []; } catch { return []; }
+}
+
+export function mergeWithPrevious(fresh, previous, now = Date.now()) {
+  const cutoff = now - MAX_AGE_DAYS * 864e5;
+  const seen = new Set(fresh.map((d) => d.id));
+  const titles = new Set(fresh.map((d) => normalizeKey(d.title)));
+  const kept = previous.filter((d) => !seen.has(d.id) && !titles.has(normalizeKey(d.title)) && new Date(d.postedAt).getTime() >= cutoff);
+  return [...fresh, ...kept];
+}
+
 async function main() {
   const sources = JSON.parse(await readFile(path.join(ROOT, "sources.json"), "utf8"));
   const sample = process.argv.includes("--sample");
@@ -259,6 +286,7 @@ async function main() {
       statuses.push({ id: "cheapshark", name: "CheapShark", ok: false, error: String(err.message || err) });
     }
   }
+  if (!sample) deals = mergeWithPrevious(deals, await previousDeals());
   deals.sort((a, b) => b.score - a.score);
 
   const okCount = statuses.filter((s) => s.ok).length;

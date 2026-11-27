@@ -42,3 +42,25 @@ test("deal ids are unique per item", () => {
   const b = buildDeal({ title: "Game B $5", link: "https://www.reddit.com/r/GameDeals/comments/bbb", date: "", html: "", image: "" }, src);
   assert.notEqual(a.id, b.id);
 });
+
+test("categorizes PS5 games, controllers and tech", async () => {
+  const src = { id: "x", name: "x" };
+  const cat = (title) => buildDeal({ title, link: "https://a/" + title, date: "", html: "", image: "" }, src).category;
+  assert.equal(cat("Marvel's Wolverine (PS5) $49.97 at Amazon"), "PS5 Games");
+  assert.equal(cat("Sony DualSense Wireless Controller $54.99 at Target"), "Gaming");
+  assert.equal(cat("Samsung 990 Pro 2TB NVMe SSD $149.99"), "Storage");
+  assert.equal(cat("LG 65\" C6 OLED 4K TV $1,399.99"), "TVs & Streaming");
+  assert.equal(cat("Apple iPad Air 11\" M4 $499"), "Laptops & Tablets");
+});
+
+test("keeps previous deals that are still fresh", async () => {
+  const { mergeWithPrevious } = await import("../scripts/fetch-deals.mjs");
+  const now = Date.parse("2026-11-28T00:00:00Z");
+  const fresh = [{ id: "a", title: "New deal one", postedAt: "2026-11-27T00:00:00Z" }];
+  const prev = [
+    { id: "a", title: "New deal one", postedAt: "2026-11-26T00:00:00Z" },
+    { id: "b", title: "Older but fresh", postedAt: "2026-11-25T00:00:00Z" },
+    { id: "c", title: "Way too old", postedAt: "2026-11-01T00:00:00Z" },
+  ];
+  assert.deepEqual(mergeWithPrevious(fresh, prev, now).map((d) => d.id), ["a", "b"]);
+});
