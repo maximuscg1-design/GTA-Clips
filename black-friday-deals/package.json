@@ -10,6 +10,6 @@
     "sample": "node scripts/fetch-deals.mjs --sample",
     "serve": "node server.mjs",
     "start": "node scripts/fetch-deals.mjs; node server.mjs",
-    "test": "node --test test/"
+    "test": "node --test test/*.test.mjs"
   }
 }
