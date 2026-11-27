@@ -248,8 +248,8 @@ async function main() {
   const cutoff = Date.now() - MAX_AGE_DAYS * 864e5;
   let deals = mergeDeals(all.filter((d) => new Date(d.postedAt).getTime() >= cutoff));
 
-  // PC game deals from CheapShark (Steam, GOG, Epic, Fanatical, Green Man Gaming...).
-  if (!sample && !process.argv.includes("--no-games")) {
+  // Optional PC game deals from CheapShark (Steam, GOG, Epic...): pass --pc-games.
+  if (!sample && process.argv.includes("--pc-games")) {
     try {
       const { fetchCheapShark } = await import("./cheapshark.mjs");
       const cs = await fetchCheapShark();

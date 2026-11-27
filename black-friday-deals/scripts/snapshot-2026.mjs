@@ -41,6 +41,31 @@ const SRC = {
   koupon: ["Koupon.ai", "https://www.koupon.ai/articles/deal-news/target-black-friday-2026-october-21-2026"],
   ebf: ["EarlyBlackFriday", "https://www.earlyblackfriday.com/target"],
   hip2save: ["Hip2Save", "https://hip2save.com/deals/target-black-friday/"],
+  consequence: ["Consequence", "https://consequence.net/2026/11/best-black-friday-ps5-game-deals-2026/"],
+  gamesgg: ["Games.gg", "https://games.gg/news/playstation-black-friday-sale-2026-best-deals/"],
+  kotaku: ["Kotaku", "https://kotaku.com/playstations-massive-black-friday-2026-sale-is-live-now-and-filled-with-big-deals-on-ps5-games-2000753373"],
+  egw: ["EGW News", "https://egw.news/gaming/news/38734/playstation-black-friday-2026-best-offers-and-deal-i4yXygoIG"],
+  tvoxel: ["TwistedVoxel", "https://twistedvoxel.com/playstation-store-black-friday-2026-best-game-deals/"],
+  tvoxel2: ["TwistedVoxel", "https://twistedvoxel.com/playstation-black-friday-2026-game-deals/"],
+  gamersextra: ["Gamersextra", "https://gamersextra.com/news/black-friday-ps5-deals-2026-games-lead-the-savings-as-console-discounts-remain-scarce/"],
+  trPS5: ["TechRadar", "https://www.techradar.com/live/news/black-friday-ps5-deals-live-2026-nov-26"],
+  grPS5: ["GamesRadar+", "https://www.gamesradar.com/live/news/the-best-black-friday-ps5-deals-live-now-2026/"],
+  pushsquare: ["Push Square", "https://www.pushsquare.com/news/2026/11/playstation-black-friday-sale-is-live-now-up-to-usd100-off-ps5-accessories-psvr2"],
+  shattered: ["Shattered", "https://shattered.io/ps5-accessories-black-friday-up-to-40-off-dualsense-pulse-elite/"],
+  psblog: ["PlayStation Blog", "https://blog.playstation.com/2026/11/03/playstations-black-friday-deals-2026/"],
+  headsets: ["Digital Citizen", "https://www.digitalcitizen.life/black-friday-2026-gaming-headset-deals-bring-discounts-of-up-to-91-on-hyperx-razer-asus-and-more/"],
+  steelseries: ["MacSources", "https://macsources.com/steelseries-black-friday-deals-2026/"],
+  pcgHeadsets: ["PC Gamer", "https://www.pcgamer.com/hardware/gaming-headsets/black-friday-gaming-headset-deals/"],
+  trTV: ["TechRadar", "https://www.techradar.com/televisions/black-friday-tv-deals-2026-smart-tvs-from-usd69-usd1-350-off-lg-c6-oled-big-savings-on-sony-samsung-tcl-mini-led-and-more"],
+  aiTV: ["AppleInsider", "https://appleinsider.com/articles/26/11/21/black-friday-oled-tv-deals-start-at-699-with-up-to-1400-off-lg-sony-samsung"],
+  gagadgetTV: ["Gagadget", "https://gagadget.com/en/736007-black-friday-gaming-tv-deals-for-ps5-and-xbox/"],
+  nintendo: ["Nintendo", "https://www.nintendo.com/us/store/showroom/black-friday-cyber-monday/"],
+  nEverything: ["Nintendo Everything", "https://nintendoeverything.com/nintendo-black-friday-deals-2026-switch-2-switch/"],
+  screenrant: ["Screen Rant", "https://screenrant.com/biggest-gaming-tech-offers-black-friday-2026/"],
+  aaAudio: ["Android Authority", "https://www.androidauthority.com/best-black-friday-headphone-deals-3740536/"],
+  rsAudio: ["Rolling Stone", "https://www.rollingstone.com/product-recommendations/tech/best-headphone-earbud-deals-black-friday-cyber-monday-2026-1235663158/"],
+  tomsSSD: ["Tom's Hardware", "https://www.tomshardware.com/pc-components/ssds/best-ssd-deals-discounts"],
+  pcgSSD: ["PC Gamer", "https://www.pcgamer.com/black-friday-ssd-deals/"],
   wtimes: ["Washington Times", "https://www.washingtontimes.com/news/2026/nov/23/black-friday-2026-running-list-major-retailers-sales-plans/"],
 };
 
@@ -120,6 +145,74 @@ const D = [
 
   ["Newegg", "Zotac GeForce RTX 5060 Graphics Card", "Zotac RTX 5060", 439.99, 519.99, "PC Parts", "gpu", "Zotac", "toms", null],
   ["Newegg", "ASUS TUF Gaming A16 Laptop, RTX 5060", "ASUS TUF Gaming A16 RTX 5060", 1399.99, 1799.99, "Laptops & Tablets", "laptop", "ASUS", "pcgamer", null],
+
+  // ---- PS5 games: physical copies at Amazon
+  ["Amazon", "Marvel's Wolverine (PS5)", "Marvel's Wolverine PS5", 49.97, 69.99, "PS5 Games", "ps5case", "Sony", "consequence", null],
+  ["Amazon", "Ghost of Yōtei Complete Edition (PS5)", "Ghost of Yotei Complete Edition PS5", 49.99, 69.99, "PS5 Games", "ps5case", "Sony", "consequence", null],
+  ["Amazon", "Death Stranding 2: On the Beach (PS5)", "Death Stranding 2 PS5", 37.99, 69.99, "PS5 Games", "ps5case", "Sony", "consequence", null],
+  ["Amazon", "NBA 2K27 (PS5)", "NBA 2K27 PS5", 29.99, 69.99, "PS5 Games", "ps5case", "2K", "consequence", null],
+  ["Amazon", "Madden NFL 27 (PS5)", "Madden NFL 27 PS5", 34.97, 69.99, "PS5 Games", "ps5case", "EA", "consequence", null],
+  ["Amazon", "EA Sports FC 27 (PS5)", "EA Sports FC 27 PS5", 29.95, 69.99, "PS5 Games", "ps5case", "EA", "trPS5", null],
+  ["Amazon", "Sonic Racing: CrossWorlds (PS5)", "Sonic Racing CrossWorlds PS5", 19.99, 39.99, "PS5 Games", "ps5case", "Sega", "consequence", null],
+  ["Amazon", "Resident Evil Requiem (PS5)", "Resident Evil Requiem PS5", 39.99, null, "PS5 Games", "ps5case", "Capcom", "trPS5", null, "Lowest price"],
+  ["Amazon", "The Last of Us Part I (PS5)", "The Last of Us Part I PS5", 28, 69, "PS5 Games", "ps5case", "Sony", "trPS5", null],
+  // ---- PS5 games: PlayStation Store (digital)
+  ["PlayStation Store", "007 First Light", "007 First Light", 34.99, 69.99, "PS5 Games", "ps5case", "IO Interactive", "gamesgg", null],
+  ["PlayStation Store", "Astro Bot", "Astro Bot", 39.59, 59.99, "PS5 Games", "ps5case", "Sony", "gamesgg", null],
+  ["PlayStation Store", "Elden Ring", "Elden Ring", 15, 49.99, "PS5 Games", "ps5case", "Bandai Namco", "gamersextra", null],
+  ["PlayStation Store", "Metaphor: ReFantazio", "Metaphor ReFantazio", 19.99, 69.99, "PS5 Games", "ps5case", "Atlus", "gamersextra", null],
+  ["PlayStation Store", "Silent Hill 2", "Silent Hill 2", 20, 70, "PS5 Games", "ps5case", "Konami", "kotaku", null],
+  ["PlayStation Store", "Silent Hill f", "Silent Hill f", 20, 70, "PS5 Games", "ps5case", "Konami", "kotaku", null],
+  ["PlayStation Store", "Silent Hill Townfall", "Silent Hill Townfall", 40, 50, "PS5 Games", "ps5case", "Konami", "kotaku", null],
+  ["PlayStation Store", "God of War Ragnarök", "God of War Ragnarok", 29.39, 69.99, "PS5 Games", "ps5case", "Sony", "tvoxel", null],
+  ["PlayStation Store", "Valheim", "Valheim", 24, 30, "PS5 Games", "ps5case", "Coffee Stain", "kotaku", null],
+  ["PlayStation Store", "Saros", "Saros", 39.89, 69.99, "PS5 Games", "ps5case", "Sony", "egw", null],
+  ["PlayStation Store", "Control Ultimate Edition", "Control Ultimate Edition", 5.99, 39.99, "PS5 Games", "ps5case", "Remedy", "tvoxel", null],
+  ["PlayStation Store", "XCOM 2", "XCOM 2", 2.99, 19.99, "PS5 Games", "ps5case", "2K", "tvoxel", null],
+  ["PlayStation Store", "Batman: Arkham Collection", "Batman Arkham Collection", 5.99, 59.99, "PS5 Games", "ps5case", "WB Games", "tvoxel2", null],
+  ["PlayStation Store", "Hogwarts Legacy (PS5)", "Hogwarts Legacy", 6.99, 69.99, "PS5 Games", "ps5case", "WB Games", "tvoxel2", null],
+  ["PlayStation Store", "It Takes Two", "It Takes Two", 7.99, 39.99, "PS5 Games", "ps5case", "EA", "tvoxel2", null],
+  ["PlayStation Store", "Red Dead Redemption 2", "Red Dead Redemption 2", 14.99, null, "PS5 Games", "ps5case", "Rockstar", "tvoxel2", null],
+  // ---- PS5 consoles and accessories
+  ["Walmart", "PS5 Slim + GTA 6 Bundle with Accessories Kit", "PS5 Slim GTA 6 bundle", 929.99, 999.99, "Gaming", "ps5", "Sony", "grPS5", null],
+  ["Best Buy", "PS5 Console + Marvel's Wolverine Bundle", "PS5 Marvel's Wolverine bundle", 689.98, 719.98, "Gaming", "ps5", "Sony", "trPS5", null],
+  ["PlayStation Direct", "PS5 Slim Digital Edition (Certified Refurbished)", "PS5 Slim Digital refurbished", 499, null, "Gaming", "ps5", "Sony", "tgPS5", "https://direct.playstation.com/en-us/deals/black-friday"],
+  ["PlayStation Direct", "DualSense Wireless Controller ($20 off)", "DualSense", 54.99, 74.99, "Gaming", "gamepad", "Sony", "pushsquare", "https://direct.playstation.com/en-us/deals/black-friday"],
+  ["Kohl's", "DualSense Wireless Controller", "DualSense wireless controller", 54.99, 74.99, "Gaming", "gamepad", "Sony", "tgPS5", null],
+  ["PlayStation Direct", "PlayStation VR2 ($100 off)", "PS VR2", null, null, "Gaming", "vr", "Sony", "psblog", "https://direct.playstation.com/en-us/deals/black-friday"],
+  ["PlayStation Direct", "PULSE Elite Wireless Headset", "PULSE Elite", 109, 149, "Gaming", "headphones", "Sony", "shattered", "https://direct.playstation.com/en-us/deals/black-friday"],
+  ["Best Buy", "PULSE Explore Wireless Earbuds", "PULSE Explore", 119, 149, "Gaming", "earbuds", "Sony", "tgPS5", null],
+  ["Walmart", "PlayStation Portal Bundle with Accessories", "PlayStation Portal bundle", 294.99, 329.99, "Gaming", "portal", "Sony", "tgPS5", null],
+  // ---- gaming headsets
+  ["Various", "SteelSeries Arctis Nova 3 Wireless Gaming Headset", "", 69.99, 109.99, "Gaming", "headphones", "SteelSeries", "steelseries", null],
+  ["Various", "SteelSeries Arctis Nova 5 Wireless Gaming Headset", "", 99.99, 149.99, "Gaming", "headphones", "SteelSeries", "steelseries", null],
+  ["Various", "SteelSeries Arctis Nova Pro Omni Gaming Headset", "", 349.99, 399.99, "Gaming", "headphones", "SteelSeries", "steelseries", null],
+  ["Various", "Turtle Beach Stealth Pro II Gaming Headset", "", 248.49, 349.99, "Gaming", "headphones", "Turtle Beach", "pcgHeadsets", null],
+  ["Various", "HyperX CloudX Stinger Core Wireless Gaming Headset", "", 59, 99, "Gaming", "headphones", "HyperX", "headsets", null],
+  ["Various", "HyperX Cloud III S Wireless Gaming Headset", "", 99, 179, "Gaming", "headphones", "HyperX", "headsets", null],
+  ["Various", "Razer BlackShark V3 Pro Gaming Headset", "", 199, 249, "Gaming", "headphones", "Razer", "pcgHeadsets", null],
+  // ---- Nintendo and Xbox
+  ["Nintendo", "Switch 2 + Nintendo Switch Sports Resort Bundle", "", 529.99, 557.97, "Gaming", "console", "Nintendo", "nintendo", "https://www.nintendo.com/us/store/showroom/black-friday-cyber-monday/"],
+  ["Various", "Xenoblade Chronicles: Definitive Edition – Switch 2 Edition", "", 48.99, 69.99, "Switch & Xbox Games", "switchcase", "Nintendo", "nEverything", null],
+  ["Various", "Disney Dreamlight Valley – Switch 2 Edition", "", 23.99, 39.99, "Switch & Xbox Games", "switchcase", "Gameloft", "nEverything", null],
+  ["Xbox Store", "Forza Horizon 6 Premium Edition", "Forza Horizon 6", 89.99, 119.99, "Switch & Xbox Games", "gamepad", "Microsoft", "screenrant", null],
+  // ---- TVs for gaming
+  ["Best Buy", "Sony 65\" Bravia 6 4K TV (120Hz gaming)", "Sony Bravia 6 65", 1199.99, 1999.99, "TVs & Streaming", "tv", "Sony", "aiTV", null],
+  ["Various", "Samsung 65\" S90H OLED (165Hz, 4x HDMI 2.1)", "", 1397, null, "TVs & Streaming", "tv", "Samsung", "aiTV", null],
+  ["Various", "Roku 65\" Pro Series OLED", "", 799, 1199, "TVs & Streaming", "tv", "Roku", "trTV", null],
+  ["Various", "Hisense 65\" U6SF Mini-LED", "", 479.99, 899.99, "TVs & Streaming", "tv", "Hisense", "trTV", null],
+  ["Various", "TCL 75\" QM6K Mini-LED", "", 699.99, null, "TVs & Streaming", "tv", "TCL", "trTV", null],
+  // ---- audio
+  ["Amazon", "Sony WF-1000XM6 Earbuds", "Sony WF-1000XM6", 248, 330, "Headphones & Audio", "earbuds", "Sony", "rsAudio", null],
+  ["Amazon", "Bose QuietComfort Ultra Earbuds (2nd Gen)", "Bose QuietComfort Ultra Earbuds 2nd Gen", 229, 299, "Headphones & Audio", "earbuds", "Bose", "aaAudio", null],
+  ["Amazon", "Samsung Galaxy Buds 4 Pro", "Samsung Galaxy Buds 4 Pro", 169.99, 249.99, "Headphones & Audio", "earbuds", "Samsung", "rsAudio", null],
+  // ---- storage (PS5 SSD upgrades and more)
+  ["Amazon", "Samsung 990 Pro 4TB NVMe SSD (PS5 compatible)", "Samsung 990 Pro 4TB", 699.99, 1099.99, "Storage", "ssd", "Samsung", "tomsSSD", null],
+  ["Amazon", "Samsung 9100 Pro 2TB PCIe 5.0 SSD", "Samsung 9100 Pro 2TB", 349.99, 679.97, "Storage", "ssd", "Samsung", "tomsSSD", null],
+  ["Amazon", "Samsung 9100 Pro 1TB PCIe 5.0 SSD", "Samsung 9100 Pro 1TB", 209.99, 339.99, "Storage", "ssd", "Samsung", "tomsSSD", null],
+  ["Newegg", "WD Black SN7100 1TB NVMe SSD", "WD Black SN7100 1TB", 149, null, "Storage", "ssd", "WD", "pcgSSD", null],
+  ["B&H Photo", "Samsung P9 Express 256GB microSD (Switch 2)", "Samsung P9 Express 256GB", 39.99, null, "Storage", "microsd", "Samsung", "pcgSSD", null],
+  ["Amazon", "Samsung T9 4TB Portable SSD", "Samsung T9 4TB", 719.99, null, "Storage", "ssd", "Samsung", "tomsSSD", null],
 ];
 
 // Store-wide sales: store, title, percent, category, source, landing page, "up to"?
@@ -135,7 +228,8 @@ const SALES = [
   ["Lululemon", "Lululemon Black Friday sale: up to 40% off", 40, "Clothing & Shoes", "nbc", "https://shop.lululemon.com/search?Ntt=sale", true],
   ["Nike", "Nike: extra 25% off sale styles with code BFRIDAY", 25, "Clothing & Shoes", "wtimes", "https://www.nike.com/w/sale-3yaep", false],
   ["Kohl's", "Kohl's Black Friday: up to 50% off through Nov 28", 50, "Store-wide sales", "wtimes", "https://www.kohls.com/search.jsp?search=black+friday", true],
-  ["PlayStation Store", "PlayStation Store Black Friday: PS5 games up to 75% off through Nov 30", 75, "Gaming", "beegame", "https://store.playstation.com/", true],
+  ["PlayStation Store", "PlayStation Store Black Friday: PS5 games up to 75% off through Nov 30", 75, "PS5 Games", "beegame", "https://store.playstation.com/en-us/pages/deals", true],
+  ["Nintendo", "Nintendo: $20 off select Switch 2 and Switch games (Nov 22–29)", null, "Switch & Xbox Games", "nintendo", "https://www.nintendo.com/us/store/showroom/black-friday-cyber-monday/", false],
 ];
 
 const SEARCH = {
@@ -145,17 +239,24 @@ const SEARCH = {
   "Target": "https://www.target.com/s?searchTerm=",
   "Home Depot": "https://www.homedepot.com/s/",
   "Newegg": "https://www.newegg.com/p/pl?d=",
+  "PlayStation Store": "https://store.playstation.com/en-us/search/",
+  "Kohl's": "https://www.kohls.com/search.jsp?search=",
+  "B&H Photo": "https://www.bhphotovideo.com/c/search?q=",
+  "Xbox Store": "https://www.xbox.com/en-US/Search/Results?q=",
 };
 
 const postedAt = "2026-11-26T12:00:00.000Z";
 const deals = [];
 D.forEach(([store, title, q, price, was, category, art, brand, src, link, note], i) => {
   const [source, sourceUrl] = SRC[src];
+  const isPage = link && /deals|showroom|black-friday/.test(link);
+  const url = link || (SEARCH[store] ? SEARCH[store] + (store === "PlayStation Store" ? encodeURIComponent(q) : encodeURIComponent(q).replace(/%20/g, "+")) : sourceUrl);
   const d = {
-    id: `s${i}`, title, store, brand, category, art, note: note || null, kind: "product",
-    url: link || SEARCH[store] + encodeURIComponent(q).replace(/%20/g, "+"),
-    exact: Boolean(link),
-    price, originalPrice: was, percentOff: was ? Math.round((1 - price / was) * 100) : null,
+    id: `s${i}`, title, store: store === "Various" ? null : store, brand, category, art, note: note || null, kind: "product",
+    url,
+    exact: Boolean(link) && !isPage,
+    linkKind: link ? (isPage ? "page" : "product") : SEARCH[store] ? "search" : "article",
+    price, originalPrice: was, percentOff: was && price != null ? Math.round((1 - price / was) * 100) : null,
     blackFriday: true, image: null, source, sourceUrl, postedAt,
   };
   d.score = score(d, Date.parse(postedAt));
@@ -169,7 +270,7 @@ SALES.forEach(([store, title, pct, category, src, url, upTo], i) => {
   deals.push(d);
 });
 // Hundreds of live PC game deals across a dozen stores.
-if (!process.argv.includes("--no-games")) {
+if (process.argv.includes("--pc-games")) {
   const { fetchCheapShark } = await import("./cheapshark.mjs");
   const cs = await fetchCheapShark({ total: 560 });
   deals.push(...cs.deals);

@@ -20,11 +20,12 @@
     "Steam": "#1b2838", "GOG": "#86328a", "Epic Games": "#313131", "Fanatical": "#ff9800", "Green Man Gaming": "#00c66b",
     "GamersGate": "#e4572e", "Ubisoft Store": "#0070ff", "WinGameStore": "#3a7bd5", "GameBillet": "#f25c05", "Gamesplanet": "#d81b60",
     "IndieGala": "#e53935", "DreamGame": "#7e57c2", "Humble": "#cc2929",
+    "PlayStation Direct": "#003791", "Xbox Store": "#107c10", "B&H Photo": "#333333", "Nintendo": "#e60012",
   };
   const CAT_HUE = {
     "TVs & Streaming": 220, "Headphones & Audio": 265, "Laptops & Tablets": 200, "Phones & Wearables": 190, "Smart Home": 160,
     "Home & Kitchen": 28, "Gaming": 345, "PC Parts": 140, "Cameras & Drones": 210, "Tools & Outdoor": 38, "Clothing & Shoes": 330,
-    "Beauty & Health": 320, "Gift Cards": 48, "Toys": 52, "PC Games": 255, "Store-wide sales": 0, "Other": 0,
+    "Beauty & Health": 320, "Gift Cards": 48, "Toys": 52, "PC Games": 255, "PS5 Games": 222, "Switch & Xbox Games": 355, "Storage": 150, "Store-wide sales": 0, "Other": 0,
   };
 
   // ---------- illustrations (drawn, so they work anywhere) ----------
@@ -64,6 +65,12 @@
     vr: () => `<rect x="76" y="86" width="248" height="112" rx="44" fill="url(#gL)"/><rect x="92" y="104" width="216" height="76" rx="30" fill="url(#gD)"/><circle cx="150" cy="142" r="14" fill="#2a2a30"/><circle cx="250" cy="142" r="14" fill="#2a2a30"/><path d="M76 132c-30 0-40 20-40 40M324 132c30 0 40 20 40 40" fill="none" stroke="#9aa0a8" stroke-width="12" stroke-linecap="round"/>${shine("M104 108h90l-30 30h-60z")}`,
     monitor: () => `<path d="M40 52q160-26 320 0v132q-160-26-320 0z" fill="url(#gD)"/><path d="M50 62q150-22 300 0v112q-150-22-300 0z" fill="url(#gS)"/><rect x="186" y="176" width="28" height="30" fill="url(#gD)"/><rect x="140" y="204" width="120" height="12" rx="6" fill="url(#gD)"/>`,
     lego: () => `<rect x="96" y="116" width="208" height="100" rx="8" fill="url(#gY)"/><rect x="96" y="116" width="208" height="16" fill="#e0a100"/>${[132, 184, 236].map((x) => `<rect x="${x}" y="92" width="34" height="28" rx="6" fill="url(#gY)"/><ellipse cx="${x + 17}" cy="92" rx="17" ry="6" fill="#ffe680"/>`).join("")}<rect x="150" y="60" width="100" height="40" rx="6" fill="url(#gR)" transform="rotate(-8 200 80)"/>`,
+    ps5case: () => `<g transform="rotate(-6 200 130)"><rect x="128" y="22" width="144" height="210" rx="10" fill="url(#gB)"/><rect x="128" y="22" width="144" height="34" rx="10" fill="#fff"/><rect x="128" y="46" width="144" height="10" fill="#fff"/>${T(200, 49, 22, "PS5", "#0a3cff")}<rect x="140" y="68" width="120" height="152" rx="4" fill="url(#gS)"/>${shine("M140 68h70l-70 110z")}</g>`,
+    switchcase: () => `<g transform="rotate(-6 200 130)"><rect x="132" y="22" width="136" height="214" rx="10" fill="url(#gR)"/><rect x="142" y="54" width="116" height="170" rx="4" fill="url(#gS)"/>${T(200, 44, 16, "SWITCH 2")}${shine("M142 54h70l-70 110z")}</g>`,
+    ps5: () => `<path d="M132 26c26-6 40 4 40 22v170c0 10-8 14-18 14h-22z" fill="url(#gL)"/><path d="M268 26c-26-6-40 4-40 22v170c0 10 8 14 18 14h22z" fill="url(#gL)"/><rect x="172" y="40" width="56" height="184" rx="8" fill="url(#gD)"/><rect x="196" y="60" width="8" height="40" rx="4" fill="#4fc3ff"/>`,
+    portal: () => `<path d="M56 110c0-30 20-44 48-44h192c28 0 48 14 48 44v40c0 30-20 46-48 46H104c-28 0-48-16-48-46z" fill="url(#gL)"/><rect x="118" y="78" width="164" height="104" rx="6" fill="url(#gS)"/><circle cx="86" cy="140" r="12" fill="#2a2a30"/><circle cx="314" cy="140" r="12" fill="#2a2a30"/>`,
+    ssd: () => `<g transform="rotate(-8 200 130)"><rect x="60" y="104" width="280" height="56" rx="6" fill="#0f5132"/><rect x="60" y="104" width="280" height="56" rx="6" fill="url(#gD)" opacity=".55"/><rect x="96" y="112" width="60" height="40" rx="3" fill="#1a1a1f"/><rect x="170" y="112" width="60" height="40" rx="3" fill="#1a1a1f"/><rect x="244" y="116" width="40" height="32" rx="3" fill="#2a2a30"/><rect x="330" y="112" width="16" height="40" fill="url(#gY)"/></g>`,
+    microsd: () => `<path d="M150 50h82l26 26v138c0 8-6 14-14 14h-94c-8 0-14-6-14-14V64c0-8 6-14 14-14z" fill="url(#gD)"/><rect x="146" y="120" width="108" height="70" rx="6" fill="url(#gR)"/>${T(200, 168, 30, "256GB")}`,
     sale: (d) => `<g transform="rotate(-9 200 130)"><path d="M78 66h178l74 64-74 64H78z" fill="url(#gR)"/><circle cx="268" cy="130" r="10" fill="#fff"/>${T(160, 112, 24, "UP TO")}${T(160, 172, 62, d.percentOff ? `${d.percentOff}%` : "SALE")}</g>`,
   };
   function artKind(d) {
@@ -76,7 +83,7 @@
       [/blender|slushi|creami/, "blender"], [/switch|ps5|playstation|xbox|console/, "console"], [/game|steam|\[gog\]|epic/, "gamepad"],
       [/rtx|radeon|gpu|graphics card/, "gpu"], [/doorbell/, "doorbell"], [/cam(era)?\b/, "camera"], [/fire tv|roku|stick/, "stick"], [/drone|dji/, "drone"],
       [/drill|driver|saw|dewalt|milwaukee|ryobi/, "drill"], [/battery/, "battery"], [/grill|griddle|smoker/, "grill"], [/gift card/, "giftcard"],
-      [/airtag|tracker/, "tag"], [/shoe|sneaker|boot/, "shoe"], [/echo dot|speaker|soundbar/, "speaker"], [/quest|vr headset/, "vr"], [/monitor/, "monitor"], [/lego/, "lego"],
+      [/\(ps5\)|ps5 game/, "ps5case"], [/ssd|nvme/, "ssd"], [/airtag|tracker/, "tag"], [/shoe|sneaker|boot/, "shoe"], [/echo dot|speaker|soundbar/, "speaker"], [/quest|vr headset/, "vr"], [/monitor/, "monitor"], [/lego/, "lego"],
     ];
     for (const [re, k] of rules) if (re.test(t)) return k;
     return "sale";
@@ -99,20 +106,21 @@
   const S = { q: "", stores: new Set(), cats: new Set(), brands: new Set(), pmin: null, pmax: null, preset: "any", pct: 0, type: "all", saved: false, sort: "score", quick: null };
   let shown = PAGE;
 
-  const PRICE_PRESETS = [["any", "Any", null, null], ["free", "Free", null, 0], ["u5", "Under $5", null, 5], ["u10", "Under $10", null, 10], ["u25", "Under $25", null, 25], ["u50", "Under $50", null, 50], ["u100", "$50–$100", 50, 100], ["u250", "$100–$250", 100, 250], ["u500", "$250–$500", 250, 500], ["o500", "$500+", 500, null]];
+  const PRICE_PRESETS = [["any", "Any", null, null], ["u5", "Under $5", null, 5], ["u10", "Under $10", null, 10], ["u25", "Under $25", null, 25], ["u50", "Under $50", null, 50], ["u100", "$50–$100", 50, 100], ["u250", "$100–$250", 100, 250], ["u500", "$250–$500", 250, 500], ["o500", "$500+", 500, null]];
   const PCTS = [[0, "Any"], [20, "20%+"], [30, "30%+"], [50, "50%+"], [70, "70%+"], [90, "90%+"]];
   const TYPES = [["all", "All"], ["product", "Products"], ["sale", "Store-wide sales"]];
   const QUICK = [
-    ["PC games", (s) => { s.cats = new Set(["PC Games"]); }],
-    ["Free games", (s) => { s.cats = new Set(["PC Games"]); s.pmax = 0; s.preset = "free"; }],
-    ["Games under $5", (s) => { s.cats = new Set(["PC Games"]); s.pmax = 5; s.preset = "u5"; }],
-    ["Top-rated games", (s) => { s.cats = new Set(["PC Games"]); s.sort = "rated"; }],
+    ["PS5 games", (s) => { s.cats = new Set(["PS5 Games"]); }],
+    ["PS5 games under $20", (s) => { s.cats = new Set(["PS5 Games"]); s.pmax = 20; s.preset = null; }],
     ["Consoles & gear", (s) => { s.cats = new Set(["Gaming"]); }],
+    ["Headsets", (s) => { s.q = "headset"; }],
+    ["Gaming TVs", (s) => { s.cats = new Set(["TVs & Streaming"]); }],
+    ["Storage", (s) => { s.cats = new Set(["Storage"]); }],
+    ["Switch & Xbox", (s) => { s.cats = new Set(["Switch & Xbox Games"]); }],
     ["Gaming laptops", (s) => { s.q = "rtx"; }],
     ["Under $50", (s) => { s.pmax = 50; s.preset = "u50"; }],
     ["50%+ off", (s) => { s.pct = 50; }],
     ["Apple", (s) => { s.brands = new Set(["Apple"]); }],
-    ["TVs", (s) => { s.cats = new Set(["TVs & Streaming"]); }],
     ["Headphones", (s) => { s.cats = new Set(["Headphones & Audio"]); }],
     ["Kitchen", (s) => { s.cats = new Set(["Home & Kitchen"]); }],
     ["Tools", (s) => { s.cats = new Set(["Tools & Outdoor"]); }],
@@ -167,13 +175,16 @@
     return `<div class="also">Also at ${d.alsoAt.slice(0, 2).map((a) => `<a href="${esc(safeUrl(a.url))}" target="_blank" rel="noopener nofollow">${esc(a.store)} ${fmt(a.price)}</a>`).join(", ")}</div>`;
   }
   // Exact product pages say "View at", store searches say "Search", so nobody is surprised.
+  const SHORT = { "PlayStation Store": "PS Store", "PlayStation Direct": "PS Direct", "Green Man Gaming": "GMG" };
   function linkLabel(d, short) {
-    if (!d.store) return "Get deal ↗";
+    d = { ...d, store: short ? SHORT[d.store] || d.store : d.store };
+    if (d.linkKind === "article" || !d.store) return "See the deal ↗";
+    if (d.linkKind === "page") return short ? `Shop<span> ${esc(d.store)}</span> ↗` : `Shop ${esc(d.store)} deals ↗`;
     if (d.kind === "sale") return "Shop the sale ↗";
     if (d.exact === false) return short ? `Search<span> ${esc(d.store)}</span> ↗` : `Search ${esc(d.store)} ↗`;
     return short ? `View<span> at ${esc(d.store)}</span> ↗` : `View at ${esc(d.store)} ↗`;
   }
-  const linkTitle = (d) => !d.store ? "Open the deal" : d.kind === "sale" ? `Opens ${d.store}'s sale page` : d.exact === false ? `Opens a search for this product on ${d.store}` : `Opens this product's page on ${d.store}`;
+  const linkTitle = (d) => d.linkKind === "article" || !d.store ? `Opens the ${d.source} article that lists this deal` : d.linkKind === "page" ? `Opens ${d.store}'s Black Friday deals page` : d.kind === "sale" ? `Opens ${d.store}'s sale page` : d.exact === false ? `Opens a search for this product on ${d.store}` : `Opens this product's page on ${d.store}`;
   function cardHTML(d, i) {
     const { hue, inner, cover } = picture(d, i < 4);
     const url = esc(safeUrl(d.url));
@@ -190,7 +201,7 @@
     return `<article class="card">
       <a class="pic${cover ? " cover" : ""}" href="${url}" title="${linkTip}" target="_blank" rel="noopener nofollow" style="--h:${hue}" tabindex="-1" aria-hidden="true">${inner}${off}${note}</a>
       <div class="info">
-        <div class="meta" style="--c:${STORE_COLOR[d.store] || "#999"}"><i></i>${esc(d.store || d.source)}${d.brand && d.brand !== d.store ? `<span class="brand">${esc(d.brand)}</span>` : ""}</div>
+        <div class="meta" style="--c:${STORE_COLOR[d.store] || "#999"}"><i></i>${esc(d.store || "Several stores")}${d.brand && d.brand !== d.store ? `<span class="brand">${esc(d.brand)}</span>` : ""}</div>
         <h3><a href="${url}" title="${linkTip}" target="_blank" rel="noopener nofollow">${esc(d.title)}</a></h3>
         ${price}${save}${rateLine(d)}${alsoLine(d)}
         <div class="row"><a class="go${d.exact === false ? " search" : ""}" href="${url}" title="${linkTip}" target="_blank" rel="noopener nofollow">${shopLabel}</a>
